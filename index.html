@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <canvas id="particle-canvas"></canvas>
     <div class="container">
         <div class="mode-toggle">
             <input type="checkbox" id="mode-switch">
@@ -79,6 +80,17 @@
                         <p id="tip-text"></p>
                         <p id="tip-reason"></p>
                     </div>
+                    <div class="share-section">
+                        <h3>Share Your Results</h3>
+                        <input type="text" id="share-link" readonly>
+                        <button class="copy-btn" onclick="copyLink()">Copy Link</button>
+                        <div class="share-icons">
+                            <a href="#" id="share-twitter" target="_blank"><i class="fab fa-twitter"></i></a>
+                            <a href="#" id="share-facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" id="share-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                            <a href="#" id="share-linkedin" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
                 </div>
                 <div class="button-container">
                     <button class="reset-btn" onclick="reset()">Reset</button>
@@ -87,5 +99,6 @@
         </div>
     </div>
     <script src="script.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </body>
 </html>
