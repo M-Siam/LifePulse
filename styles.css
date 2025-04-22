@@ -13,7 +13,7 @@ body {
     background: linear-gradient(135deg, #e0e7ff, #ffffff);
     transition: background 0.5s;
     position: relative;
-    overflow: hidden;
+    overflow: auto;
 }
 
 body.dark {
@@ -21,7 +21,7 @@ body.dark {
 }
 
 #particle-canvas {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -31,7 +31,7 @@ body.dark {
 
 body::before {
     content: '';
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -80,10 +80,9 @@ body.obese::before {
     width: 100%;
     max-width: 600px;
     z-index: 2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     min-height: 100vh;
+    display: flex;
+    align-items: center;
 }
 
 .card {
@@ -95,9 +94,27 @@ body.obese::before {
     border: 1px solid rgba(255, 255, 255, 0.2);
     transition: all 0.5s ease;
     position: relative;
+    max-height: 90vh;
     overflow-y: auto;
-    max-height: 80vh;
-    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #007bff rgba(255, 255, 255, 0.1);
+}
+
+.card::-webkit-scrollbar {
+    width: 8px;
+}
+
+.card::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.card::-webkit-scrollbar-thumb {
+    background: #007bff;
+    border-radius: 4px;
+}
+
+body.dark .card::-webkit-scrollbar-thumb {
+    background: #00ff88;
 }
 
 .card.result-shown {
@@ -238,12 +255,12 @@ body.dark .subtitle {
 .input-panel {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
 }
 
 .input-group {
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .input-group input,
@@ -410,7 +427,7 @@ body.dark .loading-text {
 .result-panel {
     display: none;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
     animation: reveal 1s ease-in-out forwards;
 }
 
@@ -495,10 +512,10 @@ body.dark .result-item {
 }
 
 .status-bubble {
-    width: 100px;
-    height: 100px;
+    width: 90px;
+    height: 90px;
     border-radius: 50%;
-    margin: 10px auto;
+    margin: 8px auto;
     background: #28a745;
     box-shadow: 0 0 20px rgba(40, 167, 69, 0.5);
     position: relative;
@@ -514,8 +531,8 @@ body.dark .result-item {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
     border: 2px solid #28a745;
     border-radius: 50%;
     transform: translate(-50%, -50%);
@@ -540,7 +557,7 @@ body.dark .health-tip {
 }
 
 .health-tip h3 {
-    margin: 8px 0 5px;
+    margin-top: 8px;
     color: #007bff;
 }
 
@@ -592,7 +609,7 @@ body.dark .preview-card {
     border-radius: 5px;
     color: #333;
     font-size: 0.9rem;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 body.dark #share-link {
@@ -609,13 +626,13 @@ body.dark #share-link {
 .share-icons {
     display: flex;
     justify-content: center;
-    gap: 15px;
-    margin-top: 10px;
+    gap: 12px;
+    margin-top: 8px;
 }
 
 .share-icons a {
     color: #007bff;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     transition: all 0.3s ease;
 }
 
@@ -633,13 +650,15 @@ body.dark .share-icons a:hover {
 }
 
 .credit {
-    text-align: center;
-    margin-top: 15px;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     color: #007bff;
     font-size: 0.9rem;
     text-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    transition: transform 0.3s;
     text-transform: uppercase;
+    transition: transform 0.3s;
 }
 
 body.dark .credit {
@@ -648,7 +667,7 @@ body.dark .credit {
 }
 
 .credit:hover {
-    transform: scale(1.1);
+    transform: translateX(-50%) scale(1.1);
 }
 
 @keyframes wave {
@@ -732,7 +751,7 @@ body.dark @keyframes glow {
 }
 
 @media (max-width: 480px) {
-    .card { padding: 20px; }
+    .card { padding: 15px; }
     .title { font-size: 2rem; }
     .result-title { font-size: 1.5rem; }
     .submit-btn, .reset-btn, .copy-btn { font-size: 0.9rem; padding: 10px 30px; }
@@ -740,4 +759,5 @@ body.dark @keyframes glow {
     .unit-input select { width: 100%; }
     .share-icons a { font-size: 1.2rem; }
     .lang-btn { padding: 6px 12px; font-size: 0.8rem; }
+    .card { max-height: 85vh; }
 }
