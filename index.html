@@ -9,11 +9,11 @@
 <body>
     <canvas id="particle-canvas"></canvas>
     <div class="container">
-        <div class="mode-toggle">
-            <input type="checkbox" id="mode-switch">
-            <label for="mode-switch">Light/Dark Mode</label>
-        </div>
         <div class="card" id="card">
+            <div class="mode-toggle">
+                <input type="checkbox" id="mode-switch">
+                <label for="mode-switch">Light/Dark</label>
+            </div>
             <h1 class="title">LifePulse</h1>
             <p class="subtitle">Analyzing Your Life Energy...</p>
             <div class="input-panel" id="input-panel">
@@ -29,12 +29,12 @@
                 </div>
                 <div class="input-group">
                     <div class="unit-input">
-                        <input type="number" id="height-cm" placeholder="Height in cm">
-                        <input type="number" id="height-ft" placeholder="Feet" style="display: none;">
-                        <input type="number" id="height-in" placeholder="Inches" style="display: none;">
+                        <input type="number" id="height-ft" placeholder="Feet">
+                        <input type="number" id="height-in" placeholder="Inches">
+                        <input type="number" id="height-cm" placeholder="Height in cm" style="display: none;">
                         <select id="height-unit">
-                            <option value="cm">cm</option>
                             <option value="ft-in">ft/in</option>
+                            <option value="cm">cm</option>
                         </select>
                     </div>
                     <label>Height</label>
@@ -63,25 +63,48 @@
                 </div>
             </div>
             <div class="result-panel" id="result-panel" style="display: none;">
+                <div class="lang-toggle">
+                    <button class="lang-btn" onclick="toggleLanguage('en')">EN</button>
+                    <button class="lang-btn" onclick="toggleLanguage('bn')">BN</button>
+                </div>
                 <h2 class="result-title">Life Energy Scan</h2>
                 <div class="result-card">
                     <div class="result-item">
-                        <span>Name:</span> <span id="result-name"></span>
+                        <span id="label-name">Name:</span> <span id="result-name"></span>
                     </div>
                     <div class="result-item">
-                        <span>Age:</span> <span id="result-age">0</span> years
+                        <span id="label-age">Age:</span> <span id="result-age">0</span> <span id="label-years">years</span>
                     </div>
                     <div class="result-item">
-                        <span>BMI:</span> <span id="result-bmi">0</span>
+                        <span id="label-bmi">BMI:</span> <span id="result-bmi">0</span>
                     </div>
-                    <div class="status-bubble" id="status-bubble"></div>
+                    <div class="status-bubble" id="status-bubble">
+                        <div class="bubble-ring"></div>
+                    </div>
                     <div class="health-tip">
-                        <h3>Health Directive</h3>
+                        <h3 id="health-directive">Health Directive</h3>
                         <p id="tip-text"></p>
                         <p id="tip-reason"></p>
+                        <h3 id="why-happened">Why This Happened</h3>
+                        <p id="why-text"></p>
+                        <h3 id="good-aspects">Good Aspects</h3>
+                        <p id="good-text"></p>
+                        <h3 id="bad-aspects">Bad Aspects</h3>
+                        <p id="bad-text"></p>
+                        <h3 id="future-instructions">Future Instructions</h3>
+                        <p id="future-text"></p>
                     </div>
                     <div class="share-section">
-                        <h3>Share Your Results</h3>
+                        <h3 id="share-results">Share Your Results</h3>
+                        <div class="share-preview">
+                            <div class="preview-card">
+                                <h4 id="preview-title">LifePulse Scan</h4>
+                                <p><span id="preview-name"></span></p>
+                                <p><span id="preview-age"></span> <span id="preview-years">years</span></p>
+                                <p>BMI: <span id="preview-bmi"></span></p>
+                                <p id="preview-status"></p>
+                            </div>
+                        </div>
                         <input type="text" id="share-link" readonly>
                         <button class="copy-btn" onclick="copyLink()">Copy Link</button>
                         <div class="share-icons">
@@ -96,6 +119,7 @@
                     <button class="reset-btn" onclick="reset()">Reset</button>
                 </div>
             </div>
+            <div class="credit">Crafted by Siam</div>
         </div>
     </div>
     <script src="script.js"></script>
