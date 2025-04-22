@@ -406,6 +406,38 @@ body.dark .loading-text {
     flex-direction: column;
     gap: 15px;
     animation: reveal 1s ease-in-out forwards;
+    max-height: 80vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #007bff rgba(255, 255, 255, 0.2);
+}
+
+.result-panel::-webkit-scrollbar {
+    width: 8px;
+}
+
+.result-panel::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.result-panel::-webkit-scrollbar-thumb {
+    background: #007bff;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+
+body.dark .result-panel {
+    scrollbar-color: #00ff88 rgba(0, 0, 0, 0.2);
+}
+
+body.dark .result-panel::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+body.dark .result-panel::-webkit-scrollbar-thumb {
+    background: #00ff88;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
 }
 
 .lang-toggle {
@@ -471,7 +503,14 @@ body.dark .result-title {
 body.dark .result-card {
     background: rgba(0, 0, 0, 0.7);
     border: 1px solid #00ff88;
-    box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+    box-shadow
+
+
+
+
+
+
+System: 0 15px rgba(0, 255, 136, 0.3);
 }
 
 .result-card.underweight { border-color: #ffc107; }
@@ -755,4 +794,5 @@ body.dark @keyframes glow {
     .lang-btn { padding: 6px 12px; font-size: 0.8rem; }
     .health-tip { grid-template-columns: 1fr; }
     .health-column.left { border-right: none; }
+    .result-panel { max-height: 70vh; }
 }
