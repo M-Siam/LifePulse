@@ -5,109 +5,124 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LifePulse – Futuristic Age & BMI Analyzer</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/png" href="https://img.icons8.com/?size=512&id=9gq5f3v4rW6r&format=png">
 </head>
-<body class="dark">
+<body>
     <canvas id="particle-canvas"></canvas>
     <div class="container">
-        <div class="card">
-            <div class="header">
-                <h1>LifePulse</h1>
-                <p data-lang="subtitle">Analyzing Your Life Energy...</p>
-                <div class="lang-switch">
+        <div class="card" id="card">
+            <div class="mode-toggle">
+                <input type="checkbox" id="mode-switch">
+                <label for="mode-switch">Light/Dark</label>
+            </div>
+            <h1 class="title">LifePulse</h1>
+            <p class="subtitle">Analyzing Your Life Energy...</p>
+            <div class="input-panel" id="input-panel">
+                <div class="input-group">
+                    <input type="text" id="name" required>
+                    <label id="label-name">Name</label>
+                    <span class="tooltip" id="tooltip-name">Enter your full name</span>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="birth-year" required min="1900" max="2025">
+                    <label id="label-birth-year">Birth Year</label>
+                    <span class="tooltip" id="tooltip-birth-year">Enter year (e.g., 1990)</span>
+                </div>
+                <div class="input-group">
+                    <div class="unit-input">
+                        <input type="number" id="height-ft" placeholder="Feet">
+                        <input type="number" id="height-in" placeholder="Inches">
+                        <input type="number" id="height-cm" placeholder="Height in cm" style="display: none;">
+                        <select id="height-unit">
+                            <option value="ft-in">FT/INC</option>
+                            <option value="cm">cm</option>
+                        </select>
+                    </div>
+                    <label id="label-height">Height</label>
+                    <span class="tooltip" id="tooltip-height">Select unit and enter height</span>
+                </div>
+                <div class="input-group">
+                    <div class="unit-input">
+                        <input type="number" id="weight-kg" placeholder="Weight in kg">
+                        <input type="number" id="weight-lbs" placeholder="Weight in lbs" style="display: none;">
+                        <select id="weight-unit">
+                            <option value="kg">kg</option>
+                            <option value="lbs">lbs</option>
+                        </select>
+                    </div>
+                    <label id="label-weight">Weight</label>
+                    <span class="tooltip" id="tooltip-weight">Select unit and enter weight</span>
+                </div>
+                <div class="button-container">
+                    <button class="submit-btn" id="analyze-btn" onclick="analyze()">Analyze</button>
+                </div>
+            </div>
+            <div class="loading-panel" id="loading-panel" style="display: none;">
+                <div class="loader">
+                    <div class="neon-ring"></div>
+                    <span class="loading-text" id="loading-text">Scanning Life Energy...</span>
+                </div>
+            </div>
+            <div class="result-panel" id="result-panel" style="display: none;">
+                <div class="lang-toggle">
                     <button class="lang-btn active" onclick="toggleLanguage('en')">EN</button>
                     <button class="lang-btn" onclick="toggleLanguage('bn')">BN</button>
                 </div>
-                <label class="switch">
-                    <input type="checkbox" id="mode-switch" checked>
-                    <span class="slider"></span>
-                </label>
-            </div>
-            <div id="input-panel" class="input-panel">
-                <div class="input-group">
-                    <label data-lang="name-label" for="name">Name</label>
-                    <input type="text" id="name" placeholder="Enter your name" title="Enter your full name" data-lang="name-tooltip">
-                </div>
-                <div class="input-group">
-                    <label data-lang="birth-year-label" for="birth-year">Birth Year</label>
-                    <input type="number" id="birth-year" placeholder="e.g., 1990" title="Enter year (e.g., 1990)" data-lang="birth-year-tooltip">
-                </div>
-                <div class="input-group">
-                    <label data-lang="height-label" for="height-unit">Height</label>
-                    <select id="height-unit">
-                        <option value="ft/in">ft/in</option>
-                        <option value="cm">cm</option>
-                    </select>
-                    <input type="number" id="height-cm" placeholder="Enter height in cm" title="Select unit and enter height" data-lang="height-tooltip" style="display: none;">
-                    <input type="number" id="height-ft" placeholder="ft" title="Select unit and enter height" data-lang="height-tooltip">
-                    <input type="number" id="height-in" placeholder="in" title="Select unit and enter height" data-lang="height-tooltip">
-                </div>
-                <div class="input-group">
-                    <label data-lang="weight-label" for="weight-unit">Weight</label>
-                    <select id="weight-unit">
-                        <option value="kg">kg</option>
-                        <option value="lbs">lbs</option>
-                    </select>
-                    <input type="number" id="weight-kg" placeholder="Enter weight in kg" title="Select unit and enter weight" data-lang="weight-tooltip">
-                    <input type="number" id="weight-lbs" placeholder="Enter weight in lbs" title="Select unit and enter weight" data-lang="weight-tooltip" style="display: none;">
-                </div>
-                <button id="analyze-btn" onclick="analyze()" data-lang="analyze-btn">Analyze</button>
-            </div>
-            <div id="loading-panel" style="display: none;">
-                <div class="spinner"></div>
-                <p data-lang="loading-text">Scanning Life Energy...</p>
-            </div>
-            <div id="result-panel" style="display: none;">
-                <h2 data-lang="result-title">Life Energy Scan</h2>
-                <div class="result-card normal">
-                    <p><span data-lang="name">Name:</span> <span id="result-name"></span></p>
-                    <p><span data-lang="age">Age:</span> <span id="result-age"></span> <span data-lang="years">years</span></p>
-                    <p><span data-lang="bmi">BMI:</span> <span id="result-bmi"></span></p>
-                    <div id="status-bubble" class="status-bubble normal"></div>
-                </div>
-                <div class="health-tip">
-                    <h3 data-lang="health-directive">Health Directive</h3>
-                    <p><strong id="tip-text"></strong></p>
-                    <p><small id="tip-reason"></small></p>
-                </div>
-                <div class="health-tip">
-                    <h3 data-lang="why-happened">Why This Happened</h3>
-                    <p id="why-text"></p>
-                </div>
-                <div class="health-tip">
-                    <h3 data-lang="good-aspects">Good Aspects</h3>
-                    <p id="good-text"></p>
-                </div>
-                <div class="health-tip">
-                    <h3 data-lang="bad-aspects">Bad Aspects</h3>
-                    <p id="bad-text"></p>
-                </div>
-                <div class="health-tip">
-                    <h3 data-lang="future-instructions">Future Instructions</h3>
-                    <p id="future-text"></p>
-                </div>
-                <div class="share-section">
-                    <h3 data-lang="share-results">Share Your Results</h3>
-                    <div class="share-preview">
-                        <h4 data-lang="preview-title">LifePulse Scan</h4>
-                        <p><span id="preview-name"></span>, <span id="preview-age"></span> <span data-lang="preview-years">years</span></p>
-                        <p><span data-lang="preview-bmi">BMI: </span><span id="preview-bmi"></span></p>
-                        <p id="preview-status"></p>
+                <h2 class="result-title" id="result-title">Life Energy Scan</h2>
+                <div class="result-card">
+                    <div class="result-item">
+                        <span id="label-result-name">Name:</span> <span id="result-name"></span>
                     </div>
-                    <div class="share-links">
-                        <a id="share-twitter" href="#" target="_blank"><img src="https://img.icons8.com/?size=512&id=8824&format=png" alt="Twitter"></a>
-                        <a id="share-facebook" href="#" target="_blank"><img src="https://img.icons8.com/?size=512&id=118467&format=png" alt="Facebook"></a>
-                        <a id="share-whatsapp" href="#" target="_blank"><img src="https://img.icons8.com/?size=512&id=82455&format=png" alt="WhatsApp"></a>
-                        <a id="share-linkedin" href="#" target="_blank"><img src="https://img.icons8.com/?size=512&id=98960&format=png" alt="LinkedIn"></a>
+                    <div class="result-item">
+                        <span id="label-result-age">Age:</span> <span id="result-age">0</span> <span id="label-years">years</span>
                     </div>
-                    <input type="text" id="share-link" readonly>
-                    <button onclick="copyLink()" data-lang="copy-btn">Copy Link</button>
+                    <div class="result-item">
+                        <span id="label-bmi">BMI:</span> <span id="result-bmi">0</span>
+                    </div>
+                    <div class="status-bubble" id="status-bubble">
+                        <div class="bubble-ring"></div>
+                    </div>
+                    <div class="health-tip">
+                        <h3 id="health-directive">Health Directive</h3>
+                        <p id="tip-text"></p>
+                        <p id="tip-reason"></p>
+                        <h3 id="why-happened">Why This Happened</h3>
+                        <p id="why-text"></p>
+                        <h3 id="good-aspects">Good Aspects</h3>
+                        <p id="good-text"></p>
+                        <h3 id="bad-aspects">Bad Aspects</h3>
+                        <p id="bad-text"></p>
+                        <h3 id="future-instructions">Future Instructions</h3>
+                        <p id="future-text"></p>
+                    </div>
+                    <div class="share-section">
+                        <h3 id="share-results">Share Your Results</h3>
+                        <div class="share-preview">
+                            <div class="preview-card">
+                                <h4 id="preview-title">LifePulse Scan</h4>
+                                <p><span id="preview-name"></span></p>
+                                <p><span id="preview-age"></span> <span id="preview-years">years</span></p>
+                                <p>BMI: <span id="preview-bmi"></span></p>
+                                <p id="preview-status"></p>
+                            </div>
+                        </div>
+                        <input type="text" id="share-link" readonly>
+                        <button class="copy-btn" id="copy-btn" onclick="copyLink()">Copy Link</button>
+                        <div class="share-icons">
+                            <a href="#" id="share-twitter" target="_blank"><i class="fab fa-twitter"></i></a>
+                            <a href="#" id="share-facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" id="share-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                            <a href="#" id="share-linkedin" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
                 </div>
-                <button onclick="reset()" data-lang="reset-btn">Reset</button>
+                <div class="button-container">
+                    <button class="reset-btn" id="reset-btn" onclick="reset()">Reset</button>
+                </div>
             </div>
-            <div class="credit">CRAFTED BY SIAM 🚀✨</div>
+            <div class="credit">🌌 CRAFTED BY SIAM ✨</div>
         </div>
     </div>
     <script src="script.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </body>
 </html>
