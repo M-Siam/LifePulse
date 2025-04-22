@@ -13,7 +13,7 @@ body {
     background: linear-gradient(135deg, #e0e7ff, #ffffff);
     transition: background 0.5s;
     position: relative;
-    overflow: auto;
+    overflow: hidden;
 }
 
 body.dark {
@@ -21,7 +21,7 @@ body.dark {
 }
 
 #particle-canvas {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -31,7 +31,7 @@ body.dark {
 
 body::before {
     content: '';
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -80,9 +80,6 @@ body.obese::before {
     width: 100%;
     max-width: 600px;
     z-index: 2;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
 }
 
 .card {
@@ -94,27 +91,7 @@ body.obese::before {
     border: 1px solid rgba(255, 255, 255, 0.2);
     transition: all 0.5s ease;
     position: relative;
-    max-height: 90vh;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #007bff rgba(255, 255, 255, 0.1);
-}
-
-.card::-webkit-scrollbar {
-    width: 8px;
-}
-
-.card::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.card::-webkit-scrollbar-thumb {
-    background: #007bff;
-    border-radius: 4px;
-}
-
-body.dark .card::-webkit-scrollbar-thumb {
-    background: #00ff88;
+    overflow: hidden;
 }
 
 .card.result-shown {
@@ -255,12 +232,12 @@ body.dark .subtitle {
 .input-panel {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
 }
 
 .input-group {
     position: relative;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .input-group input,
@@ -427,7 +404,7 @@ body.dark .loading-text {
 .result-panel {
     display: none;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
     animation: reveal 1s ease-in-out forwards;
 }
 
@@ -481,14 +458,14 @@ body.dark .result-title {
 
 .result-card {
     background: rgba(255, 255, 255, 0.2);
-    padding: 15px;
+    padding: 20px;
     border-radius: 15px;
     border: 1px solid #007bff;
     box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
     transition: border-color 0.5s;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
 }
 
 body.dark .result-card {
@@ -502,7 +479,7 @@ body.dark .result-card {
 .result-card.obese { border-color: #ff5722; }
 
 .result-item {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     color: #333;
     margin: 5px 0;
 }
@@ -512,10 +489,10 @@ body.dark .result-item {
 }
 
 .status-bubble {
-    width: 90px;
-    height: 90px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
-    margin: 8px auto;
+    margin: 10px auto;
     background: #28a745;
     box-shadow: 0 0 20px rgba(40, 167, 69, 0.5);
     position: relative;
@@ -531,8 +508,8 @@ body.dark .result-item {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 110px;
-    height: 110px;
+    width: 120px;
+    height: 120px;
     border: 2px solid #28a745;
     border-radius: 50%;
     transform: translate(-50%, -50%);
@@ -545,10 +522,13 @@ body.dark .result-item {
 
 .health-tip {
     background: rgba(255, 255, 255, 0.2);
-    padding: 12px;
+    padding: 15px;
     border-radius: 10px;
     color: #333;
     animation: slideIn 0.5s ease-in-out;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }
 
 body.dark .health-tip {
@@ -556,23 +536,36 @@ body.dark .health-tip {
     color: #fff;
 }
 
-.health-tip h3 {
-    margin-top: 8px;
+.health-column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.health-column h3 {
     color: #007bff;
 }
 
-body.dark .health-tip h3 {
+body.dark .health-column h3 {
     color: #00ff88;
 }
 
+.health-column.left {
+    border-right: 1px solid rgba(0, 123, 255, 0.3);
+}
+
+body.dark .health-column.left {
+    border-right: 1px solid rgba(0, 255, 136, 0.3);
+}
+
 .share-section {
-    margin-top: 12px;
+    margin-top: 15px;
     text-align: center;
 }
 
 .share-section h3 {
     color: #007bff;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 body.dark .share-section h3 {
@@ -580,12 +573,12 @@ body.dark .share-section h3 {
 }
 
 .share-preview {
-    margin: 8px 0;
+    margin: 10px 0;
 }
 
 .preview-card {
     background: rgba(255, 255, 255, 0.2);
-    padding: 12px;
+    padding: 15px;
     border-radius: 10px;
     border: 1px solid #007bff;
     box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
@@ -609,7 +602,7 @@ body.dark .preview-card {
     border-radius: 5px;
     color: #333;
     font-size: 0.9rem;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 body.dark #share-link {
@@ -626,13 +619,13 @@ body.dark #share-link {
 .share-icons {
     display: flex;
     justify-content: center;
-    gap: 12px;
-    margin-top: 8px;
+    gap: 15px;
+    margin-top: 10px;
 }
 
 .share-icons a {
     color: #007bff;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     transition: all 0.3s ease;
 }
 
@@ -651,23 +644,24 @@ body.dark .share-icons a:hover {
 
 .credit {
     position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
     color: #007bff;
-    font-size: 0.9rem;
-    text-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    font-size: 1rem;
+    text-shadow: 0 0 8px rgba(0, 123, 255, 0.7);
     text-transform: uppercase;
     transition: transform 0.3s;
 }
 
 body.dark .credit {
     color: #00ff88;
-    text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+    text-shadow: 0 0 8px rgba(0, 255, 136, 0.7);
 }
 
 .credit:hover {
-    transform: translateX(-50%) scale(1.1);
+    transform: scale(1.1);
 }
 
 @keyframes wave {
@@ -751,7 +745,7 @@ body.dark @keyframes glow {
 }
 
 @media (max-width: 480px) {
-    .card { padding: 15px; }
+    .card { padding: 20px; }
     .title { font-size: 2rem; }
     .result-title { font-size: 1.5rem; }
     .submit-btn, .reset-btn, .copy-btn { font-size: 0.9rem; padding: 10px 30px; }
@@ -759,5 +753,6 @@ body.dark @keyframes glow {
     .unit-input select { width: 100%; }
     .share-icons a { font-size: 1.2rem; }
     .lang-btn { padding: 6px 12px; font-size: 0.8rem; }
-    .card { max-height: 85vh; }
+    .health-tip { grid-template-columns: 1fr; }
+    .health-column.left { border-right: none; }
 }
