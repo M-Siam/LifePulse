@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -49,51 +10,79 @@
     <div class="container">
         <div class="mode-toggle">
             <input type="checkbox" id="mode-switch">
-            <label for="mode-switch">Toggle Mode</label>
+            <label for="mode-switch">Light/Dark Mode</label>
         </div>
-        <div class="card">
+        <div class="card" id="card">
             <h1 class="title">LifePulse</h1>
             <p class="subtitle">Analyzing Your Life Energy...</p>
             <div class="input-panel" id="input-panel">
                 <div class="input-group">
                     <input type="text" id="name" required>
                     <label>Name</label>
+                    <span class="tooltip">Enter your full name</span>
                 </div>
                 <div class="input-group">
                     <input type="number" id="birth-year" required min="1900" max="2025">
                     <label>Birth Year</label>
+                    <span class="tooltip">Enter year (e.g., 1990)</span>
                 </div>
                 <div class="input-group">
-                    <input type="number" id="height" required min="50" max="300">
-                    <label>Height (cm)</label>
+                    <div class="unit-input">
+                        <input type="number" id="height-cm" placeholder="Height in cm">
+                        <input type="number" id="height-ft" placeholder="Feet" style="display: none;">
+                        <input type="number" id="height-in" placeholder="Inches" style="display: none;">
+                        <select id="height-unit">
+                            <option value="cm">cm</option>
+                            <option value="ft-in">ft/in</option>
+                        </select>
+                    </div>
+                    <label>Height</label>
+                    <span class="tooltip">Select unit and enter height</span>
                 </div>
                 <div class="input-group">
-                    <input type="number" id="weight" required min="10" max="500">
-                    <label>Weight (kg)</label>
+                    <div class="unit-input">
+                        <input type="number" id="weight-kg" placeholder="Weight in kg">
+                        <input type="number" id="weight-lbs" placeholder="Weight in lbs" style="display: none;">
+                        <select id="weight-unit">
+                            <option value="kg">kg</option>
+                            <option value="lbs">lbs</option>
+                        </select>
+                    </div>
+                    <label>Weight</label>
+                    <span class="tooltip">Select unit and enter weight</span>
                 </div>
-                <button class="submit-btn" onclick="analyze()">Analyze</button>
+                <div class="button-container">
+                    <button class="submit-btn" onclick="analyze()">Analyze</button>
+                </div>
             </div>
             <div class="loading-panel" id="loading-panel" style="display: none;">
-                <div class="glitch">Processing...</div>
+                <div class="loader">
+                    <div class="neon-ring"></div>
+                    <span class="loading-text">Scanning Life Energy...</span>
+                </div>
             </div>
             <div class="result-panel" id="result-panel" style="display: none;">
-                <h2>Life Energy Report</h2>
-                <div class="result-item">
-                    <span>Name:</span> <span id="result-name"></span>
+                <h2 class="result-title">Life Energy Scan</h2>
+                <div class="result-card">
+                    <div class="result-item">
+                        <span>Name:</span> <span id="result-name"></span>
+                    </div>
+                    <div class="result-item">
+                        <span>Age:</span> <span id="result-age">0</span> years
+                    </div>
+                    <div class="result-item">
+                        <span>BMI:</span> <span id="result-bmi">0</span>
+                    </div>
+                    <div class="status-bubble" id="status-bubble"></div>
+                    <div class="health-tip">
+                        <h3>Health Directive</h3>
+                        <p id="tip-text"></p>
+                        <p id="tip-reason"></p>
+                    </div>
                 </div>
-                <div class="result-item">
-                    <span>Age:</span> <span id="result-age">0</span> years
+                <div class="button-container">
+                    <button class="reset-btn" onclick="reset()">Reset</button>
                 </div>
-                <div class="result-item">
-                    <span>BMI:</span> <span id="result-bmi">0</span>
-                </div>
-                <div class="status-bubble" id="status-bubble"></div>
-                <div class="health-tip">
-                    <h3>Health Tip</h3>
-                    <p id="tip-text"></p>
-                    <p id="tip-reason"></p>
-                </div>
-                <button class="reset-btn" onclick="reset()">Reset</button>
             </div>
         </div>
     </div>
