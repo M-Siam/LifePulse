@@ -36,42 +36,42 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(45deg, transparent, rgba(0, 123, 255, 0.2), transparent);
-    opacity: 0.3;
-    animation: wave 10s infinite;
+    background: linear-gradient(45deg, transparent, rgba(0, 123, 255, 0.3), transparent);
+    opacity: 0.4;
+    animation: wave 12s infinite;
     z-index: 1;
 }
 
 body.dark::before {
-    background: linear-gradient(45deg, transparent, rgba(0, 255, 136, 0.2), transparent);
+    background: linear-gradient(45deg, transparent, rgba(0, 255, 136, 0.3), transparent);
 }
 
 body.input-active::before {
-    animation: wave 5s infinite;
+    animation: wave 6s infinite;
 }
 
 body.loading::before {
-    animation: wave 2s infinite, flicker 0.5s infinite;
+    animation: wave 2s infinite, flicker 0.4s infinite;
 }
 
 body.normal::before {
-    background: linear-gradient(45deg, transparent, rgba(40, 167, 69, 0.2), transparent);
-    animation: wave 8s infinite;
+    background: linear-gradient(45deg, transparent, rgba(40, 167, 69, 0.3), transparent);
+    animation: wave 10s infinite;
 }
 
 body.underweight::before {
-    background: linear-gradient(45deg, transparent, rgba(255, 193, 7, 0.2), transparent);
-    animation: wave 4s infinite, flicker 1s infinite;
+    background: linear-gradient(45deg, transparent, rgba(255, 193, 7, 0.3), transparent);
+    animation: wave 5s infinite, flicker 0.8s infinite;
 }
 
 body.overweight::before {
-    background: linear-gradient(45deg, transparent, rgba(220, 53, 69, 0.2), transparent);
-    animation: wave 3s infinite, flicker 0.7s infinite;
+    background: linear-gradient(45deg, transparent, rgba(220, 53, 69, 0.3), transparent);
+    animation: wave 4s infinite, flicker 0.6s infinite;
 }
 
 body.obese::before {
-    background: linear-gradient(45deg, transparent, rgba(255, 87, 34, 0.2), transparent);
-    animation: wave 2s infinite, flicker 0.4s infinite;
+    background: linear-gradient(45deg, transparent, rgba(255, 87, 34, 0.3), transparent);
+    animation: wave 3s infinite, flicker 0.5s infinite;
 }
 
 .container {
@@ -80,61 +80,6 @@ body.obese::before {
     width: 100%;
     max-width: 600px;
     z-index: 2;
-}
-
-.mode-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    z-index: 1000;
-}
-
-.mode-toggle label {
-    color: #333;
-    font-size: 14px;
-    cursor: pointer;
-    text-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-body.dark .mode-toggle label {
-    color: #fff;
-    text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
-}
-
-.mode-toggle input {
-    appearance: none;
-    width: 40px;
-    height: 20px;
-    background: #ccc;
-    border-radius: 20px;
-    position: relative;
-    cursor: pointer;
-    transition: background 0.3s;
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
-}
-
-.mode-toggle input:checked {
-    background: #00ff88;
-}
-
-.mode-toggle input::before {
-    content: '';
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    background: #fff;
-    border-radius: 50%;
-    top: 2px;
-    left: 2px;
-    transition: transform 0.3s;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-}
-
-.mode-toggle input:checked::before {
-    transform: translateX(20px);
 }
 
 .card {
@@ -164,6 +109,99 @@ body.dark .card.result-shown {
     background: rgba(0, 0, 0, 0.7);
     border: 1px solid #00ff88;
     box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+}
+
+.card::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, rgba(0, 123, 255, 0.3), transparent);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: radialPulse 4s infinite;
+    z-index: -1;
+}
+
+body.dark .card::after {
+    background: radial-gradient(circle, rgba(0, 255, 136, 0.3), transparent);
+}
+
+body.normal .card::after {
+    background: radial-gradient(circle, rgba(40, 167, 69, 0.3), transparent);
+    animation: radialPulse 6s infinite;
+}
+
+body.underweight .card::after {
+    background: radial-gradient(circle, rgba(255, 193, 7, 0.3), transparent);
+    animation: radialPulse 4s infinite;
+}
+
+body.overweight .card::after {
+    background: radial-gradient(circle, rgba(220, 53, 69, 0.3), transparent);
+    animation: radialPulse 3s infinite;
+}
+
+body.obese .card::after {
+    background: radial-gradient(circle, rgba(255, 87, 34, 0.3), transparent);
+    animation: radialPulse 2s infinite;
+}
+
+.mode-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 10;
+}
+
+.mode-toggle label {
+    color: #333;
+    font-size: 12px;
+    cursor: pointer;
+    text-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+body.dark .mode-toggle label {
+    color: #fff;
+    text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+}
+
+.mode-toggle input {
+    appearance: none;
+    width: 36px;
+    height: 18px;
+    background: #ccc;
+    border-radius: 18px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+}
+
+.mode-toggle input:checked {
+    background: #00ff88;
+}
+
+.mode-toggle input::before {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+.mode-toggle input:checked::before {
+    transform: translateX(18px);
 }
 
 .title {
@@ -263,16 +301,17 @@ body.dark .input-group label {
 
 .input-group .tooltip {
     position: absolute;
-    top: 50%;
+    top: -30px;
     right: 10px;
-    transform: translateY(-50%);
     color: #666;
     font-size: 0.8rem;
     background: rgba(255, 255, 255, 0.9);
     padding: 5px 10px;
     border-radius: 5px;
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: opacity 0.3s ease 0.2s;
+    pointer-events: none;
+    z-index: 5;
 }
 
 body.dark .input-group .tooltip {
@@ -365,8 +404,41 @@ body.dark .loading-text {
 .result-panel {
     display: none;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
     animation: reveal 1s ease-in-out forwards;
+}
+
+.lang-toggle {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.lang-btn {
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #007bff, #00d4ff);
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+body.dark .lang-btn {
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+}
+
+.lang-btn:hover {
+    transform: scale(1.05);
+}
+
+.lang-btn.active {
+    background: linear-gradient(135deg, #0056b3, #0096cc);
+}
+
+body.dark .lang-btn.active {
+    background: linear-gradient(135deg, #00cc66, #0096cc);
 }
 
 .result-title {
@@ -391,6 +463,9 @@ body.dark .result-title {
     border: 1px solid #007bff;
     box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
     transition: border-color 0.5s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 body.dark .result-card {
@@ -406,7 +481,7 @@ body.dark .result-card {
 .result-item {
     font-size: 1.2rem;
     color: #333;
-    margin: 10px 0;
+    margin: 5px 0;
 }
 
 body.dark .result-item {
@@ -414,21 +489,36 @@ body.dark .result-item {
 }
 
 .status-bubble {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
-    margin: 20px auto;
+    margin: 10px auto;
     background: #28a745;
     box-shadow: 0 0 20px rgba(40, 167, 69, 0.5);
-    animation: pulse 2s infinite;
+    position: relative;
     opacity: 0;
-    animation-delay: 0.5s;
-    animation-fill-mode: forwards;
+    animation: pulse 2s infinite, fadeIn 0.5s 0.5s forwards;
 }
 
 .status-bubble.underweight { background: #ffc107; }
 .status-bubble.overweight { background: #dc3545; }
 .status-bubble.obese { background: #ff5722; }
+
+.bubble-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120px;
+    height: 120px;
+    border: 2px solid #28a745;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: ringPulse 3s infinite;
+}
+
+.status-bubble.underweight .bubble-ring { border-color: #ffc107; animation: ringPulse 2.5s infinite; }
+.status-bubble.overweight .bubble-ring { border-color: #dc3545; animation: ringPulse 2s infinite; }
+.status-bubble.obese .bubble-ring { border-color: #ff5722; animation: ringPulse 1.5s infinite; }
 
 .health-tip {
     background: rgba(255, 255, 255, 0.2);
@@ -443,8 +533,17 @@ body.dark .health-tip {
     color: #fff;
 }
 
+.health-tip h3 {
+    margin-top: 10px;
+    color: #007bff;
+}
+
+body.dark .health-tip h3 {
+    color: #00ff88;
+}
+
 .share-section {
-    margin-top: 20px;
+    margin-top: 15px;
     text-align: center;
 }
 
@@ -455,6 +554,28 @@ body.dark .health-tip {
 
 body.dark .share-section h3 {
     color: #00ff88;
+}
+
+.share-preview {
+    margin: 10px 0;
+}
+
+.preview-card {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #007bff;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+    text-align: left;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+body.dark .preview-card {
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid #00ff88;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+    color: #fff;
 }
 
 #share-link {
@@ -505,6 +626,25 @@ body.dark .share-icons a:hover {
     text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
 }
 
+.credit {
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    color: #007bff;
+    font-size: 0.8rem;
+    text-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    transition: transform 0.3s;
+}
+
+body.dark .credit {
+    color: #00ff88;
+    text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+}
+
+.credit:hover {
+    transform: scale(1.1);
+}
+
 @keyframes wave {
     0% { transform: translateX(0); }
     50% { transform: translateX(-100px); }
@@ -512,9 +652,9 @@ body.dark .share-icons a:hover {
 }
 
 @keyframes flicker {
-    0% { opacity: 0.3; }
-    50% { opacity: 0.5; }
-    100% { opacity: 0.3; }
+    0% { opacity: 0.4; }
+    50% { opacity: 0.6; }
+    100% { opacity: 0.4; }
 }
 
 @keyframes fadeIn {
@@ -545,6 +685,18 @@ body.dark @keyframes glow {
     0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.5); }
     70% { box-shadow: 0 0 0 20px rgba(40, 167, 69, 0); }
     100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+}
+
+@keyframes ringPulse {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.2; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+}
+
+@keyframes radialPulse {
+    0% { width: 0; height: 0; opacity: 0.5; }
+    50% { width: 400px; height: 400px; opacity: 0.2; }
+    100% { width: 0; height: 0; opacity: 0.5; }
 }
 
 @keyframes spin {
@@ -581,4 +733,5 @@ body.dark @keyframes glow {
     .unit-input { flex-direction: column; gap: 5px; }
     .unit-input select { width: 100%; }
     .share-icons a { font-size: 1.2rem; }
+    .lang-btn { padding: 6px 12px; font-size: 0.8rem; }
 }
