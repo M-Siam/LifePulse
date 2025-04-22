@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="LifePulse Scan">
+    <meta property="og:description" content="Discover your LifePulse: Age & BMI Analysis with a Futuristic Twist!">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630?text=LifePulse+Scan">
     <title>LifePulse – Futuristic Age & BMI Analyzer</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -59,9 +62,6 @@
             <div class="loading-panel" id="loading-panel" style="display: none;">
                 <div class="loader">
                     <div class="neon-ring"></div>
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
-                    </div>
                     <span class="loading-text" id="loading-text">Scanning Life Energy...</span>
                 </div>
             </div>
@@ -115,12 +115,12 @@
                         <input type="text" id="share-link" readonly>
                         <button class="copy-btn" onclick="copyLink()">Copy Link</button>
                         <div class="share-icons">
-                            <a href="#" id="share-facebook" target="_blank" title="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#" id="share-instagram" target="_blank" title="Share on Instagram"><i class="fab fa-instagram"></i></a>
-                            <a href="#" id="share-whatsapp" target="_blank" title="Share on WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                            <a href="#" id="share-telegram" target="_blank" title="Share on Telegram"><i class="fab fa-telegram-plane"></i></a>
-                            <a href="#" id="share-x" target="_blank" title="Share on X"><i class="fab fa-x-twitter"></i></a>
-                            <a href="#" id="share-reddit" target="_blank" title="Share on Reddit"><i class="fab fa-reddit-alien"></i></a>
+                            <a href="#" id="share-facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" id="share-instagram" target="_blank"><i class="fab fa-instagram"></i></a>
+                            <a href="#" id="share-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                            <a href="#" id="share-telegram" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+                            <a href="#" id="share-x" target="_blank"><i class="fab fa-x-twitter"></i></a>
+                            <a href="#" id="share-reddit" target="_blank"><i class="fab fa-reddit-alien"></i></a>
                         </div>
                     </div>
                 </div>
@@ -128,10 +128,11 @@
                     <button class="reset-btn" onclick="reset()">Reset</button>
                 </div>
             </div>
+        </div>
+        <div class="footer">
             <div class="credit">CRAFTED BY SIAM 🌌</div>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="script.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </body>
