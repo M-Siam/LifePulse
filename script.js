@@ -95,7 +95,7 @@ const langData = {
         previewYears: 'years',
         loadingText: 'Scanning Life Energy...',
         resultTitle: 'Life Energy Scan',
-        copySuccess: 'Link copied! Share your LifePulse Scan with friends!',
+        copySuccess: 'Link copied! Share your LifePulse Scan:\nLifePulse Scan\nName: %name%\nAge: %age% %years%\nBMI: %bmi%\nStatus: %status%',
         normal: {
             status: 'Normal',
             tip: 'Maintain a balanced diet with regular exercise (30 min/day).',
@@ -154,7 +154,7 @@ const langData = {
         previewYears: 'বছর',
         loadingText: 'জীবনী শক্তি স্ক্যান করা হচ্ছে...',
         resultTitle: 'জীবনী শক্তি স্ক্যান',
-        copySuccess: 'লিঙ্ক কপি করা হয়েছে! আপনার লাইফপালস স্ক্যান বন্ধুদের সাথে শেয়ার করুন!',
+        copySuccess: 'লিঙ্ক কপি করা হয়েছে! আপনার লাইফপালস স্ক্যান শেয়ার করুন:\nলাইফপালস স্ক্যান\nনাম: %name%\nবয়স: %age% %years%\nবিএমআই: %bmi%\nঅবস্থা: %status%',
         normal: {
             status: 'স্বাভাবিক',
             tip: 'নিয়মিত ব্যায়াম (প্রতিদিন ৩০ মিনিট) এবং সুষম খাদ্য বজায় রাখুন।',
@@ -196,12 +196,67 @@ const langData = {
 
 let currentLang = 'en';
 
+// Utility Functions
+function animateValue(id, start, end, duration) {
+    let startTimestamp = null;
+    const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const value = start + (end - start) * progress;
+        document.getElementById(id).textContent = value.toFixed(id === 'result-bmi' ? 1 : 0);
+        if (progress < 1) {
+            requestAnimationFrame(step);
+        }
+    };
+    requestAnimationFrame(step);
+}
+
+function updateMetaTags(name, age, bmi, status) {
+    const title = currentLang === 'en' ? `LifePulse Scan for ${name}` : `লাইফপালস স্ক্যান: ${name}`;
+    const description = currentLang === 'en' ?
+        `Name: ${name}, Age: ${age} ${langData[currentLang].years}, BMI: ${bmi}, Status: ${langData[currentLang][status].status}. Check yours!` :
+        `নাম: ${name}, বয়স: ${age} ${langData[currentLang].years}, বিএমআই: ${bmi}, অবস্থা: ${langData[currentLang][status].status}. আপনারটা পরীক্ষা করুন!`;
+
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    const ogDescription = document.querySelector('meta[property="og:description"]');
+    const ogUrl = document.querySelector('meta[property="og:url"]');
+    const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+    const twitterDescription = document.querySelector('meta[name="twitter:description"]');
+
+    if (ogTitle) ogTitle.setAttribute('content', title);
+    if (ogDescription) ogDescription.setAttribute('content', description);
+    if (ogUrl) ogUrl.setAttribute('content', window.location.href);
+    if (twitterTitle) twitterTitle.setAttribute('content', title);
+    if (twitterDescription) twitterDescription.setAttribute('content', description);
+}
+
+function copyLink() {
+    const shareLink = document.getElementById('share-link').value;
+    const name = document.getElementById('result-name').textContent;
+    const age = document.getElementById('result-age').textContent;
+    const bmi = document.getElementById('result-bmi').textContent;
+    const status = document.querySelector('.result-card').className.split(' ')[1];
+    const cardText = langData[currentLang].copySuccess
+        .replace('%name%', name)
+        .replace('%age%', age)
+        .replace('%years%', langData[currentLang].years)
+        .replace('%bmi%', bmi)
+        .replace('%status%', langData[currentLang][status].status);
+    navigator.clipboard.writeText(shareLink);
+    const alertDiv = document.getElementById('copy-alert');
+    alertDiv.textContent = cardText;
+    alertDiv.style.display = 'block';
+    setTimeout(() => {
+        alertDiv.style.display = 'none';
+    }, 5000);
+}
+
+// Language Toggle
 function toggleLanguage(lang) {
     currentLang = lang;
     document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelector(`.lang-btn[onclick="toggleLanguage('${lang}')"]`).classList.add('active');
 
-    // Update all text
     document.getElementById('title').textContent = langData[lang].title;
     document.getElementById('subtitle').textContent = langData[lang].subtitle;
     document.getElementById('label-name-input').textContent = langData[lang].nameInput;
@@ -229,7 +284,6 @@ function updateResultContent(status) {
     document.getElementById('share-results').textContent = langData[currentLang].shareResults;
     document.getElementById('preview-title').textContent = langData[currentLang].previewTitle;
     document.getElementById('preview-years').textContent = langData[currentLang].previewYears;
-
     document.getElementById('tip-text').textContent = data.tip;
     document.getElementById('tip-reason').textContent = data.reason;
     document.getElementById('why-text').textContent = data.why;
@@ -262,6 +316,24 @@ document.querySelectorAll('.input-panel input').forEach(input => {
         document.body.classList.add('input-active');
     });
 });
+
+function instagramShare() {
+    const shareLink = document.getElementById('share-link').value;
+    const name = document.getElementById('result-name').textContent;
+    const age = document.getElementById('result-age').textContent;
+    const bmi = document.getElementById('result-bmi').textContent;
+    const status = document.querySelector('.result-card').className.split(' ')[1];
+    const cardText = langData[currentLang].copySuccess
+        .replace('%name%', name)
+        .replace('%age%', age)
+        .replace('%years%', langData[currentLang].years)
+        .replace('%bmi%', bmi)
+        .replace('%status%', langData[currentLang][status].status);
+    navigator.clipboard.writeText(`${cardText}\n${shareLink}`);
+    alert(currentLang === 'en' ?
+        'Instagram sharing is limited. Link and card text copied! Paste into an Instagram post or story.' :
+        'ইনস্টাগ্রাম শেয়ারিং সীমিত। লিঙ্ক এবং কার্ড টেক্সট কপি করা হয়েছে! ইনস্টাগ্রাম পোস্ট বা স্টোরিতে পেস্ট করুন।');
+}
 
 function analyze() {
     const name = document.getElementById('name').value;
@@ -300,7 +372,6 @@ function analyze() {
         return;
     }
 
-    // Show loading
     document.getElementById('input-panel').style.display = 'none';
     document.getElementById('loading-panel').style.display = 'block';
     document.getElementById('card').classList.remove('result-shown');
@@ -308,13 +379,11 @@ function analyze() {
     document.body.classList.add('loading');
 
     setTimeout(() => {
-        // Calculate age and BMI
         const currentYear = 2025;
         const age = currentYear - birthYear;
         const heightM = heightCm / 100;
         const bmi = (weightKg / (heightM * heightM)).toFixed(1);
 
-        // Determine status
         let statusClass;
         if (bmi < 18.5) {
             statusClass = 'underweight';
@@ -326,7 +395,6 @@ function analyze() {
             statusClass = 'obese';
         }
 
-        // Update result panel
         document.getElementById('result-name').textContent = name;
         document.getElementById('result-age').textContent = age;
         document.getElementById('result-bmi').textContent = bmi;
@@ -335,34 +403,28 @@ function analyze() {
         document.getElementById('status-bubble').className = `status-bubble ${statusClass}`;
         updateResultContent(statusClass);
 
-        // Update share preview
         document.getElementById('preview-name').textContent = name;
         document.getElementById('preview-age').textContent = age;
         document.getElementById('preview-bmi').textContent = bmi;
 
-        // Generate share link
         const shareLink = `${window.location.origin}${window.location.pathname}?name=${encodeURIComponent(name)}&age=${age}&bmi=${bmi}&status=${statusClass}&lang=${currentLang}`;
         document.getElementById('share-link').value = shareLink;
 
-        // Update share icons with card text
+        updateMetaTags(name, age, bmi, statusClass);
+
         const cardText = currentLang === 'en' ?
             `LifePulse Scan\nName: ${name}\nAge: ${age} ${langData[currentLang].years}\nBMI: ${bmi}\nStatus: ${langData[currentLang][statusClass].status}` :
             `লাইফপালস স্ক্যান\nনাম: ${name}\nবয়স: ${age} ${langData[currentLang].years}\nবিএমআই: ${bmi}\nঅবস্থা: ${langData[currentLang][statusClass].status}`;
-        const shareText = currentLang === 'en' ?
-            `${cardText}\nCheck yours!` :
-            `${cardText}\nআপনারটা পরীক্ষা করুন!`;
+        const shareText = currentLang === 'en' ? `${cardText}\nCheck yours!` : `${cardText}\nআপনারটা পরীক্ষা করুন!`;
         document.getElementById('share-facebook').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareLink)}&quote=${encodeURIComponent(shareText)}`;
-        document.getElementById('share-instagram').href = `https://www.instagram.com/?url=${encodeURIComponent(shareLink)}`; // Note: Instagram sharing is limited
         document.getElementById('share-whatsapp').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + '\n' + shareLink)}`;
         document.getElementById('share-telegram').href = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=${encodeURIComponent(shareText)}`;
         document.getElementById('share-x').href = `https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareLink)}`;
         document.getElementById('share-reddit').href = `https://www.reddit.com/submit?url=${encodeURIComponent(shareLink)}&title=${encodeURIComponent(shareText)}`;
 
-        // Animate age and BMI
         animateValue('result-age', 0, age, 1000);
         animateValue('result-bmi', 0, bmi, 1000);
 
-        // Show result
         document.getElementById('loading-panel').style.display = 'none';
         document.getElementById('result-panel').style.display = 'flex';
         document.getElementById('card').classList.add('result-shown');
@@ -372,32 +434,12 @@ function analyze() {
     }, 2000);
 }
 
-function copyLink() {
-    const shareLink = document.getElementById('share-link');
-    shareLink.select();
-    document.execCommand('copy');
-    alert(langData[currentLang].copySuccess);
-}
-
-function animateValue(id, start, end, duration) {
-    let startTimestamp = null;
-    const step = (timestamp) => {
-        if (!startTimestamp) startTimestamp = timestamp;
-        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-        const value = start + progress * (end - start);
-        document.getElementById(id).textContent = value.toFixed(id === 'result-bmi' ? 1 : 0);
-        if (progress < 1) {
-            requestAnimationFrame(step);
-        }
-    };
-    requestAnimationFrame(step);
-}
-
 function reset() {
-    document.getElementById('result-panel').style.display = 'none';
     document.getElementById('input-panel').style.display = 'flex';
+    document.getElementById('result-panel').style.display = 'none';
     document.getElementById('card').classList.remove('result-shown');
-    document.body.classList.remove('input-active', 'normal', 'underweight', 'overweight', 'obese');
+    document.body.classList.remove('normal', 'underweight', 'overweight', 'obese', 'loading');
+    animateParticles('initial');
     document.getElementById('name').value = '';
     document.getElementById('birth-year').value = '';
     document.getElementById('height-cm').value = '';
@@ -405,59 +447,54 @@ function reset() {
     document.getElementById('height-in').value = '';
     document.getElementById('weight-kg').value = '';
     document.getElementById('weight-lbs').value = '';
-    document.getElementById('height-unit').value = 'ft-in';
-    document.getElementById('weight-unit').value = 'kg';
-    document.getElementById('height-cm').style.display = 'none';
-    document.getElementById('height-ft').style.display = 'block';
-    document.getElementById('height-in').style.display = 'block';
-    document.getElementById('weight-kg').style.display = 'block';
-    document.getElementById('weight-lbs').style.display = 'none';
-    toggleLanguage('en');
-    animateParticles('initial');
 }
 
-// Handle shared link
-window.onload = () => {
+// Handle Shared Link
+function handleSharedLink() {
     const params = new URLSearchParams(window.location.search);
-    if (params.has('name') && params.has('age') && params.has('bmi') && params.has('status')) {
-        const name = params.get('name');
-        const age = parseInt(params.get('age'));
-        const bmi = parseFloat(params.get('bmi'));
-        const statusClass = params.get('status');
-        currentLang = params.get('lang') || 'en';
+    const name = params.get('name');
+    const age = parseInt(params.get('age'));
+    const bmi = parseFloat(params.get('bmi'));
+    const status = params.get('status');
+    const lang = params.get('lang') || 'en';
 
+    if (name && age && bmi && status && ['normal', 'underweight', 'overweight', 'obese'].includes(status)) {
+        currentLang = lang;
+        toggleLanguage(lang);
         document.getElementById('input-panel').style.display = 'none';
         document.getElementById('result-panel').style.display = 'flex';
         document.getElementById('card').classList.add('result-shown');
-        document.body.classList.add(statusClass);
-        animateParticles(statusClass);
+        document.body.classList.add(status);
+        animateParticles(status);
 
         document.getElementById('result-name').textContent = name;
         document.getElementById('result-age').textContent = age;
         document.getElementById('result-bmi').textContent = bmi;
-        document.querySelector('.result-card').className = `result-card ${statusClass}`;
-        document.getElementById('status-bubble').className = `status-bubble ${statusClass}`;
+        const resultCard = document.querySelector('.result-card');
+        resultCard.className = `result-card ${status}`;
+        document.getElementById('status-bubble').className = `status-bubble ${status}`;
+        updateResultContent(status);
 
         document.getElementById('preview-name').textContent = name;
         document.getElementById('preview-age').textContent = age;
         document.getElementById('preview-bmi').textContent = bmi;
 
-        toggleLanguage(currentLang);
-        updateResultContent(statusClass);
-
         const shareLink = window.location.href;
         document.getElementById('share-link').value = shareLink;
+
+        updateMetaTags(name, age, bmi, status);
+
         const cardText = currentLang === 'en' ?
-            `LifePulse Scan\nName: ${name}\nAge: ${age} ${langData[currentLang].years}\nBMI: ${bmi}\nStatus: ${langData[currentLang][statusClass].status}` :
-            `লাইফপালস স্ক্যান\nনাম: ${name}\nবয়স: ${age} ${langData[currentLang].years}\nবিএমআই: ${bmi}\nঅবস্থা: ${langData[currentLang][statusClass].status}`;
-        const shareText = currentLang === 'en' ?
-            `${cardText}\nCheck yours!` :
-            `${cardText}\nআপনারটা পরীক্ষা করুন!`;
+            `LifePulse Scan\nName: ${name}\nAge: ${age} ${langData[currentLang].years}\nBMI: ${bmi}\nStatus: ${langData[currentLang][status].status}` :
+            `লাইফপালস স্ক্যান\nনাম: ${name}\nবয়স: ${age} ${langData[currentLang].years}\nবিএমআই: ${bmi}\nঅবস্থা: ${langData[currentLang][status].status}`;
+        const shareText = currentLang === 'en' ? `${cardText}\nCheck yours!` : `${cardText}\nআপনারটা পরীক্ষা করুন!`;
         document.getElementById('share-facebook').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareLink)}&quote=${encodeURIComponent(shareText)}`;
-        document.getElementById('share-instagram').href = `https://www.instagram.com/?url=${encodeURIComponent(shareLink)}`;
         document.getElementById('share-whatsapp').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + '\n' + shareLink)}`;
         document.getElementById('share-telegram').href = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=${encodeURIComponent(shareText)}`;
         document.getElementById('share-x').href = `https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareLink)}`;
         document.getElementById('share-reddit').href = `https://www.reddit.com/submit?url=${encodeURIComponent(shareLink)}&title=${encodeURIComponent(shareText)}`;
     }
-};
+}
+
+// Initialize
+window.addEventListener('load', handleSharedLink);
