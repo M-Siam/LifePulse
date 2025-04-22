@@ -1,4 +1,4 @@
-// Particle Animation
+/* Same as provided in the April 22, 2025, 11:10 response */
 const canvas = document.getElementById('particle-canvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -65,7 +65,6 @@ function animateParticles(status) {
 initParticles();
 animateParticles('initial');
 
-// Language Data
 const langData = {
     en: {
         subtitle: 'Analyzing Your Life Energy...',
@@ -238,7 +237,6 @@ function updateResultContent(status) {
     });
 }
 
-// Event Listeners
 document.getElementById('mode-switch').addEventListener('change', () => {
     document.body.classList.toggle('dark');
 });
@@ -335,7 +333,6 @@ function analyze() {
                     statusText = langData[currentLang].obese.status;
                 }
 
-                // Update result panel with null checks
                 const resultElements = {
                     'result-name': name,
                     'result-age': age,
@@ -370,13 +367,11 @@ function analyze() {
 
                 updateResultContent(statusClass);
 
-                // Generate share link
                 const shareLink = `${window.location.origin}${window.location.pathname}?name=${encodeURIComponent(name)}&age=${age}&bmi=${bmi}&status=${statusClass}&lang=${currentLang}`;
                 const shareLinkInput = document.getElementById('share-link');
                 if (shareLinkInput) shareLinkInput.value = shareLink;
                 else console.warn('Share link input not found');
 
-                // Update share icons
                 const shareText = currentLang === 'en' ?
                     `My LifePulse Scan: ${name}, Age ${age}, BMI ${bmi} (${statusText}). Check yours!` :
                     `আমার লাইফপালস স্ক্যান: ${name}, বয়স ${age}, বিএমআই ${bmi} (${statusText})। আপনারটা পরীক্ষা করুন!`;
@@ -392,11 +387,9 @@ function analyze() {
                     else console.warn(`Share link element with ID ${id} not found`);
                 });
 
-                // Animate age and BMI
                 animateValue('result-age', 0, age, 1000);
                 animateValue('result-bmi', 0, bmi, 1000);
 
-                // Show result
                 console.log('Showing result panel');
                 loadingPanel.style.display = 'none';
                 resultPanel.style.display = 'flex';
@@ -495,7 +488,6 @@ function reset() {
     animateParticles('initial');
 }
 
-// Handle shared link
 window.onload = () => {
     const params = new URLSearchParams(window.location.search);
     if (params.has('name') && params.has('age') && params.has('bmi') && params.has('status')) {
