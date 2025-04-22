@@ -1,11 +1,11 @@
-/* Same as provided in the April 22, 2025, 11:10 response */
+// Particle Animation
 const canvas = document.getElementById('particle-canvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let particles = [];
-const particleCount = 50;
+const particleCount = 100;
 
 class Particle {
     constructor() {
@@ -65,135 +65,124 @@ function animateParticles(status) {
 initParticles();
 animateParticles('initial');
 
+// Language Data
 const langData = {
     en: {
-        subtitle: 'Analyzing Your Life Energy...',
         name: 'Name:',
-        'name-label': 'Name',
-        'name-tooltip': 'Enter your full name',
-        'birth-year-label': 'Birth Year',
-        'birth-year-tooltip': 'Enter year (e.g., 1990)',
-        'height-label': 'Height',
-        'height-tooltip': 'Select unit and enter height',
-        'weight-label': 'Weight',
-        'weight-tooltip': 'Select unit and enter weight',
-        'analyze-btn': 'Analyze',
-        'loading-text': 'Scanning Life Energy...',
-        'result-title': 'Life Energy Scan',
         age: 'Age:',
         years: 'years',
         bmi: 'BMI:',
-        'health-directive': 'Health Directive',
-        'why-happened': 'Why This Happened',
-        'good-aspects': 'Good Aspects',
-        'bad-aspects': 'Bad Aspects',
-        'future-instructions': 'Future Instructions',
-        'share-results': 'Share Your Results',
-        'preview-title': 'LifePulse Scan',
-        'preview-years': 'years',
-        'preview-bmi': 'BMI: ',
-        'copy-btn': 'Copy Link',
-        'reset-btn': 'Reset',
+        healthDirective: 'Health Directive',
+        whyHappened: 'Why This Happened',
+        goodAspects: 'Good Aspects',
+        badAspects: 'Bad Aspects',
+        futureInstructions: 'Future Instructions',
+        shareResults: 'Share Your Results',
+        previewTitle: 'LifePulse Scan',
+        previewYears: 'years',
+        resultTitle: 'Life Energy Scan',
+        loadingText: 'Scanning Life Energy...',
+        analyzeBtn: 'Analyze',
+        resetBtn: 'Reset',
+        copyBtn: 'Copy Link',
+        tooltipName: 'Enter your full name',
+        tooltipBirthYear: 'Enter year (e.g., 1990)',
+        tooltipHeight: 'Select unit and enter height',
+        tooltipWeight: 'Select unit and enter weight',
         normal: {
-            status: 'Normal',
             tip: 'Maintain a balanced diet with regular exercise (30 min/day).',
             reason: 'This optimizes overall health and prevents chronic issues.',
             why: 'Your BMI indicates a healthy weight, likely due to balanced nutrition and active lifestyle.',
             good: 'A normal BMI supports cardiovascular health, energy levels, and longevity.',
             bad: 'No significant risks, but avoid extreme diets or inactivity to maintain this balance.',
-            future: 'Continue with 150 min/week of moderate exercise (e.g., brisk walking) and a diet rich in vegetables, lean proteins, and whole grains.'
+            future: 'Continue with 150 min/week of moderate exercise (e.g., brisk walking) and a diet rich in vegetables, lean proteins, and whole grains.',
+            status: 'Normal'
         },
         underweight: {
-            status: 'Underweight',
             tip: 'Increase calorie intake with nutrient-rich foods like nuts and avocados.',
             reason: 'This helps build muscle mass and boosts energy levels safely.',
             why: 'Your low BMI may result from high metabolism, inadequate calorie intake, or stress.',
             good: 'You may have high energy efficiency, but focus on gaining healthy weight.',
             bad: 'Underweight status can lead to weakened immunity, fatigue, and fertility issues.',
-            future: 'Eat frequent, small meals with protein (e.g., eggs, chicken), healthy fats, and consult a dietitian for a 500–1000 kcal/day surplus.'
+            future: 'Eat frequent, small meals with protein (e.g., eggs, chicken), healthy fats, and consult a dietitian for a 500–1000 kcal/day surplus.',
+            status: 'Underweight'
         },
         overweight: {
-            status: 'Overweight',
             tip: 'Incorporate cardio (e.g., running) and strength training weekly.',
             reason: 'This reduces excess weight and improves cardiovascular health.',
             why: 'Your BMI suggests excess body fat, possibly due to sedentary habits or high-calorie diet.',
             good: 'You have a foundation to build fitness; small changes can yield big results.',
             bad: 'Overweight status increases risks of diabetes, hypertension, and joint issues.',
-            future: 'Aim for 300 min/week of mixed cardio and strength exercises, reduce processed foods, and track calories to create a 500 kcal/day deficit.'
+            future: 'Aim for 300 min/week of mixed cardio and strength exercises, reduce processed foods, and track calories to create a 500 kcal/day deficit.',
+            status: 'Overweight'
         },
         obese: {
-            status: 'Obese',
             tip: 'Consult a nutritionist for a tailored weight management plan.',
             reason: 'This ensures safe, sustainable progress with professional guidance.',
             why: 'Your high BMI likely stems from prolonged calorie surplus, low activity, or genetic factors.',
             good: 'Taking action now can significantly improve your health trajectory.',
             bad: 'Obesity heightens risks of heart disease, stroke, and metabolic disorders.',
-            future: 'Work with a healthcare provider for a personalized plan, start with low-impact exercise (e.g., swimming), and focus on whole foods with a 500–1000 kcal/day deficit.'
+            future: 'Work with a healthcare provider for a personalized plan, start with low-impact exercise (e.g., swimming), and focus on whole foods with a 500–1000 kcal/day deficit.',
+            status: 'Obese'
         }
     },
     bn: {
-        subtitle: 'আপনার জীবনী শক্তি বিশ্লেষণ করা হচ্ছে...',
         name: 'নাম:',
-        'name-label': 'নাম',
-        'name-tooltip': 'আপনার পূর্ণ নাম লিখুন',
-        'birth-year-label': 'জন্ম সাল',
-        'birth-year-tooltip': 'সাল লিখুন (যেমন, ১৯৯০)',
-        'height-label': 'উচ্চতা',
-        'height-tooltip': 'ইউনিট নির্বাচন করুন এবং উচ্চতা লিখুন',
-        'weight-label': 'ওজন',
-        'weight-tooltip': 'ইউনিট নির্বাচন করুন এবং ওজন লিখুন',
-        'analyze-btn': 'বিশ্লেষণ',
-        'loading-text': 'জীবনী শক্তি স্ক্যান করা হচ্ছে...',
-        'result-title': 'জীবনী শক্তি স্ক্যান',
         age: 'বয়স:',
         years: 'বছর',
         bmi: 'বিএমআই:',
-        'health-directive': 'স্বাস্থ্য নির্দেশনা',
-        'why-happened': 'কেন এটি ঘটেছে',
-        'good-aspects': 'ভালো দিক',
-        'bad-aspects': 'খারাপ দিক',
-        'future-instructions': 'ভবিষ্যৎ নির্দেশনা',
-        'share-results': 'আপনার ফলাফল শেয়ার করুন',
-        'preview-title': 'লাইফপালস স্ক্যান',
-        'preview-years': 'বছর',
-        'preview-bmi': 'বিএমআই: ',
-        'copy-btn': 'লিঙ্ক কপি',
-        'reset-btn': 'রিসেট',
+        healthDirective: 'স্বাস্থ্য নির্দেশনা',
+        whyHappened: 'কেন এটি ঘটেছে',
+        goodAspects: 'ভালো দিক',
+        badAspects: 'খারাপ দিক',
+        futureInstructions: 'ভবিষ্যৎ নির্দেশনা',
+        shareResults: 'আপনার ফলাফল শেয়ার করুন',
+        previewTitle: 'লাইফপালস স্ক্যান',
+        previewYears: 'বছর',
+        resultTitle: 'জীবন শক্তি স্ক্যান',
+        loadingText: 'জীবন শক্তি স্ক্যান করা হচ্ছে...',
+        analyzeBtn: 'বিশ্লেষণ',
+        resetBtn: 'রিসেট',
+        copyBtn: 'লিঙ্ক কপি',
+        tooltipName: 'আপনার পূর্ণ নাম লিখুন',
+        tooltipBirthYear: 'জন্ম সাল লিখুন (যেমন, ১৯৯০)',
+        tooltipHeight: 'ইউনিট নির্বাচন করুন এবং উচ্চতা লিখুন',
+        tooltipWeight: 'ইউনিট নির্বাচন করুন এবং ওজন লিখুন',
         normal: {
-            status: 'স্বাভাবিক',
             tip: 'নিয়মিত ব্যায়াম (প্রতিদিন ৩০ মিনিট) এবং সুষম খাদ্য বজায় রাখুন।',
             reason: 'এটি সামগ্রিক স্বাস্থ্য উন্নত করে এবং দীর্ঘমেয়াদী রোগ প্রতিরোধ করে।',
             why: 'আপনার বিএমআই স্বাস্থ্যকর ওজন নির্দেশ করে, যা সম্ভবত সুষম পুষ্টি এবং সক্রিয় জীবনযাপনের ফল।',
             good: 'স্বাভাবিক বিএমআই হৃদরোগের স্বাস্থ্য, শক্তির মাত্রা এবং দীর্ঘায়ু সমর্থন করে।',
             bad: 'কোনো উল্লেখযোগ্য ঝুঁকি নেই, তবে চরম ডায়েট বা নিষ্ক্রিয়তা এড়িয়ে এই ভারসাম্য বজায় রাখুন।',
-            future: 'সপ্তাহে ১৫০ মিনিট মাঝারি ব্যায়াম (যেমন, দ্রুত হাঁটা) চালিয়ে যান এবং শাকসবজি, চর্বিহীন প্রোটিন এবং পূর্ণ শস্য সমৃদ্ধ খাদ্য গ্রহণ করুন।'
+            future: 'সপ্তাহে ১৫০ মিনিট মাঝারি ব্যায়াম (যেমন, দ্রুত হাঁটা) চালিয়ে যান এবং শাকসবজি, চর্বিহীন প্রোটিন এবং পূর্ণ শস্য সমৃদ্ধ খাদ্য গ্রহণ করুন।',
+            status: 'স্বাভাবিক'
         },
         underweight: {
-            status: 'কম ওজন',
             tip: 'বাদাম এবং অ্যাভোকাডোর মতো পুষ্টিকর খাবার দিয়ে ক্যালোরি গ্রহণ বাড়ান।',
             reason: 'এটি পেশী ভর বাড়াতে এবং নিরাপদে শক্তির মাত্রা বৃদ্ধি করতে সহায়তা করে।',
             why: 'আপনার কম বিএমআই উচ্চ বিপাক, অপর্যাপ্ত ক্যালোরি গ্রহণ বা মানসিক চাপের কারণে হতে পারে।',
             good: 'আপনার শক্তির দক্ষতা বেশি হতে পারে, তবে স্বাস্থ্যকর ওজন বাড়ানোর দিকে মনোযোগ দিন।',
             bad: 'কম ওজনের অবস্থা রোগ প্রতিরোধ ক্ষমতা দুর্বল করতে, ক্লান্তি সৃষ্টি করতে এবং প্রজনন সমস্যা সৃষ্টি করতে পারে।',
-            future: 'প্রোটিন সমৃদ্ধ (যেমন, ডিম, মুরগি) এবং স্বাস্থ্যকর চর্বিযুক্ত ঘন ঘন ছোট খাবার খান এবং প্রতিদিন ৫০০–১০০০ ক্যালোরি উদ্বৃত্তের জন্য একজন ডায়েটিশিয়ানের সাথে পরামর্শ করুন।'
+            future: 'প্রোটিন সমৃদ্ধ (যেমন, ডিম, মুরগি) এবং স্বাস্থ্যকর চর্বিযুক্ত ঘন ঘন ছোট খাবার খান এবং প্রতিদিন ৫০০–১০০০ ক্যালোরি উদ্বৃত্তের জন্য একজন ডায়েটিশিয়ানের সাথে পরামর্শ করুন।',
+            status: 'কম ওজন'
         },
         overweight: {
-            status: 'অতিরিক্ত ওজন',
             tip: 'সাপ্তাহিক কার্ডিও (যেমন, দৌড়) এবং শক্তি প্রশিক্ষণ অন্তর্ভুক্ত করুন।',
             reason: 'এটি অতিরিক্ত ওজন কমায় এবং হৃদরোগের স্বাস্থ্য উন্নত করে।',
             why: 'আপনার বিএমআই অতিরিক্ত শরীরের চর্বি নির্দেশ করে, সম্ভবত নিষ্ক্রিয় অভ্যাস বা উচ্চ-ক্যালোরি খাদ্যের কারণে।',
             good: 'আপনার ফিটনেস গড়ে তোলার ভিত্তি রয়েছে; ছোট পরিবর্তন বড় ফলাফল দিতে পারে।',
             bad: 'অতিরিক্ত ওজন ডায়াবেটিস, উচ্চ রক্তচাপ এবং জয়েন্ট সমস্যার ঝুঁকি বাড়ায়।',
-            future: 'সপ্তাহে ৩০০ মিনিট মিশ্র কার্ডিও এবং শক্তি ব্যায়ামের লক্ষ্য রাখুন, প্রক্রিয়াজাত খাবার কমান এবং ৫০০ ক্যালোরি/দিন ঘাটতি তৈরি করতে ক্যালোরি ট্র্যাক করুন।'
+            future: 'সপ্তাহে ৩০০ মিনিট মিশ্র কার্ডিও এবং শক্তি ব্যায়ামের লক্ষ্য রাখুন, প্রক্রিয়াজাত খাবার কমান এবং ৫০০ ক্যালোরি/দিন ঘাটতি তৈরি করতে ক্যালোরি ট্র্যাক করুন।',
+            status: 'অতিরিক্ত ওজন'
         },
         obese: {
-            status: 'স্থূলতা',
             tip: 'ব্যক্তিগতকৃত ওজন ব্যবস্থাপনা পরিকল্পনার জন্য একজন পুষ্টিবিদের সাথে পরামর্শ করুন।',
             reason: 'এটি পেশাদার নির্দেশনার সাথে নিরাপদ, টেকসই অগ্রগতি নিশ্চিত করে।',
             why: 'আপনার উচ্চ বিএমআই সম্ভবত দীর্ঘায়িত ক্যালোরি উদ্বৃত্ত, কম কার্যকলাপ বা জেনেটিক কারণ থেকে উদ্ভূত।',
             good: 'এখন পদক্ষেপ নেওয়া আপনার স্বাস্থ্যের গতিপথ উল্লেখযোগ্যভাবে উন্নত করতে পারে।',
             bad: 'স্থূলতা হৃদরোগ, স্ট্রোক এবং বিপাকীয় ব্যাধিগুলির ঝুঁকি বাড়ায়।',
-            future: 'ব্যক্তিগতকৃত পরিকল্পনার জন্য একজন স্বাস্থ্যসেবা প্রদানকারীর সাথে কাজ করুন, কম-প্রভাব ব্যায়াম (যেমন, সাঁতার) দিয়ে শুরু করুন এবং ৫০০–১০০০ ক্যালোরি/দিন ঘাটতির সাথে পূর্ণ খাবারের উপর মনোযোগ দিন।'
+            future: 'ব্যক্তিগতকৃত পরিকল্পনার জন্য একজন স্বাস্থ্যসেবা প্রদানকারীর সাথে কাজ করুন, কম-প্রভাব ব্যায়াম (যেমন, সাঁতার) দিয়ে শুরু করুন এবং ৫০০–১০০০ ক্যালোরি/দিন ঘাটতির সাথে পূর্ণ খাবারের উপর মনোযোগ দিন।',
+            status: 'স্থূলতা'
         }
     }
 };
@@ -204,48 +193,77 @@ function toggleLanguage(lang) {
     currentLang = lang;
     document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelector(`.lang-btn[onclick="toggleLanguage('${lang}')"]`).classList.add('active');
-    updateLanguage();
+    updateUI();
 }
 
-function updateLanguage(status) {
-    document.querySelectorAll('[data-lang]').forEach(el => {
-        const key = el.getAttribute('data-lang');
-        if (langData[currentLang][key]) {
-            el.textContent = langData[currentLang][key];
-        }
-    });
-    if (status || document.querySelector('.result-card')) {
-        updateResultContent(status || document.querySelector('.result-card')?.className.split(' ')[1] || 'normal');
+function updateUI(status) {
+    const lang = langData[currentLang];
+    // Update input panel
+    document.getElementById('label-name').textContent = lang.name;
+    document.getElementById('label-birth-year').textContent = langData[currentLang].birthYear || 'Birth Year:';
+    document.getElementById('label-height').textContent = langData[currentLang].height || 'Height:';
+    document.getElementById('label-weight').textContent = langData[currentLang].weight || 'Weight:';
+    document.getElementById('tooltip-name').textContent = lang.tooltipName;
+    document.getElementById('tooltip-birth-year').textContent = lang.tooltipBirthYear;
+    document.getElementById('tooltip-height').textContent = lang.tooltipHeight;
+    document.getElementById('tooltip-weight').textContent = lang.tooltipWeight;
+    document.getElementById('analyze-btn').textContent = lang.analyzeBtn;
+
+    // Update loading panel
+    document.getElementById('loading-text').textContent = lang.loadingText;
+
+    // Update result panel
+    if (document.getElementById('result-panel').style.display === 'flex') {
+        const currentStatus = status || document.querySelector('.result-card').className.split(' ')[1] || 'normal';
+        const data = lang[currentStatus];
+        document.getElementById('result-title').textContent = lang.resultTitle;
+        document.getElementById('label-result-name').textContent = lang.name;
+        document.getElementById('label-result-age').textContent = lang.age;
+        document.getElementById('label-years').textContent = lang.years;
+        document.getElementById('label-bmi').textContent = lang.bmi;
+        document.getElementById('health-directive').textContent = lang.healthDirective;
+        document.getElementById('why-happened').textContent = lang.whyHappened;
+        document.getElementById('good-aspects').textContent = lang.goodAspects;
+        document.getElementById('bad-aspects').textContent = lang.badAspects;
+        document.getElementById('future-instructions').textContent = lang.futureInstructions;
+        document.getElementById('share-results').textContent = lang.shareResults;
+        document.getElementById('preview-title').textContent = lang.previewTitle;
+        document.getElementById('preview-years').textContent = lang.previewYears;
+        document.getElementById('tip-text').textContent = data.tip;
+        document.getElementById('tip-reason').textContent = data.reason;
+        document.getElementById('why-text').textContent = data.why;
+        document.getElementById('good-text').textContent = data.good;
+        document.getElementById('bad-text').textContent = data.bad;
+        document.getElementById('future-text').textContent = data.future;
+        document.getElementById('preview-status').textContent = data.status;
+
+        // Update share links
+        const name = document.getElementById('result-name').textContent;
+        const age = parseInt(document.getElementById('result-age').textContent);
+        const bmi = parseFloat(document.getElementById('result-bmi').textContent);
+        const shareLink = `${window.location.origin}${window.location.pathname}?name=${encodeURIComponent(name)}&age=${age}&bmi=${bmi}&status=${currentStatus}&lang=${currentLang}`;
+        document.getElementById('share-link').value = shareLink;
+        const shareText = currentLang === 'en' ?
+            `My LifePulse Scan: ${name}, Age ${age}, BMI ${bmi} (${data.status}). Check yours!` :
+            `আমার লাইফপালস স্ক্যান: ${name}, বয়স ${age}, বিএমআই ${bmi} (${data.status})। আপনারটা পরীক্ষা করুন!`;
+        document.getElementById('share-twitter').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareLink)}`;
+        document.getElementById('share-facebook').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareLink)}`;
+        document.getElementById('share-whatsapp').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareLink)}`;
+        document.getElementById('share-linkedin').href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareLink)}`;
     }
 }
 
-function updateResultContent(status) {
-    const data = langData[currentLang][status];
-    const elements = {
-        'tip-text': data.tip,
-        'tip-reason': data.reason,
-        'why-text': data.why,
-        'good-text': data.good,
-        'bad-text': data.bad,
-        'future-text': data.future,
-        'preview-status': data.status
-    };
-    Object.entries(elements).forEach(([id, value]) => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = value;
-        else console.warn(`Element with ID ${id} not found`);
-    });
-}
-
+// Event Listeners
 document.getElementById('mode-switch').addEventListener('change', () => {
     document.body.classList.toggle('dark');
+    updateUI();
 });
 
 document.getElementById('height-unit').addEventListener('change', (e) => {
     const unit = e.target.value;
     document.getElementById('height-cm').style.display = unit === 'cm' ? 'block' : 'none';
-    document.getElementById('height-ft').style.display = unit === 'ft/in' ? 'block' : 'none';
-    document.getElementById('height-in').style.display = unit === 'ft/in' ? 'block' : 'none';
+    document.getElementById('height-ft').style.display = unit === 'ft-in' ? 'block' : 'none';
+    document.getElementById('height-in').style.display = unit === 'ft-in' ? 'block' : 'none';
 });
 
 document.getElementById('weight-unit').addEventListener('change', (e) => {
@@ -261,180 +279,112 @@ document.querySelectorAll('.input-panel input').forEach(input => {
 });
 
 function analyze() {
-    console.log('analyze() started');
-    try {
-        const name = document.getElementById('name').value.trim();
-        const birthYear = parseInt(document.getElementById('birth-year').value);
-        const heightUnit = document.getElementById('height-unit').value;
-        const weightUnit = document.getElementById('weight-unit').value;
+    const name = document.getElementById('name').value;
+    const birthYear = parseInt(document.getElementById('birth-year').value);
+    const heightUnit = document.getElementById('height-unit').value;
+    const weightUnit = document.getElementById('weight-unit').value;
 
-        let heightCm, weightKg;
+    let heightCm, weightKg;
 
-        if (heightUnit === 'cm') {
-            heightCm = parseFloat(document.getElementById('height-cm').value) || 0;
-        } else {
-            const feet = parseFloat(document.getElementById('height-ft').value) || 0;
-            const inches = parseFloat(document.getElementById('height-in').value) || 0;
-            heightCm = (feet * 30.48) + (inches * 2.54);
-        }
-
-        if (weightUnit === 'kg') {
-            weightKg = parseFloat(document.getElementById('weight-kg').value) || 0;
-        } else {
-            weightKg = (parseFloat(document.getElementById('weight-lbs').value) || 0) * 0.453592;
-        }
-
-        if (!name) {
-            throw new Error(currentLang === 'en' ? 'Name is required.' : 'নাম প্রয়োজন।');
-        }
-        if (isNaN(birthYear) || birthYear < 1900 || birthYear > 2025) {
-            throw new Error(currentLang === 'en' ? 'Invalid birth year.' : 'অবৈধ জন্ম সাল।');
-        }
-        if (heightCm <= 50 || heightCm >= 300) {
-            throw new Error(currentLang === 'en' ? 'Invalid height (must be between 50–300 cm).' : 'অবৈধ উচ্চতা (৫০–৩০০ সেমি হতে হবে)।');
-        }
-        if (weightKg <= 10 || weightKg >= 500) {
-            throw new Error(currentLang === 'en' ? 'Invalid weight (must be between 10–500 kg).' : 'অবৈধ ওজন (১০–৫০০ কেজি হতে হবে)।');
-        }
-
-        console.log('Showing loading panel');
-        const inputPanel = document.getElementById('input-panel');
-        const loadingPanel = document.getElementById('loading-panel');
-        const resultPanel = document.getElementById('result-panel');
-        const card = document.getElementById('card');
-
-        inputPanel.style.display = 'none';
-        loadingPanel.style.display = 'block';
-        resultPanel.style.display = 'none';
-        card.classList.remove('result-shown');
-        document.body.classList.remove('input-active', 'normal', 'underweight', 'overweight', 'obese');
-        document.body.classList.add('loading');
-
-        setTimeout(() => {
-            try {
-                console.log('Processing result');
-                const currentYear = 2025;
-                const age = currentYear - birthYear;
-                const heightM = heightCm / 100;
-                const bmi = (weightKg / (heightM * heightM)).toFixed(1);
-
-                let statusClass, statusText;
-                if (bmi < 18.5) {
-                    statusClass = 'underweight';
-                    statusText = langData[currentLang].underweight.status;
-                } else if (bmi >= 18.5 && bmi < 25) {
-                    statusClass = 'normal';
-                    statusText = langData[currentLang].normal.status;
-                } else if (bmi >= 25 && bmi < 30) {
-                    statusClass = 'overweight';
-                    statusText = langData[currentLang].overweight.status;
-                } else {
-                    statusClass = 'obese';
-                    statusText = langData[currentLang].obese.status;
-                }
-
-                const resultElements = {
-                    'result-name': name,
-                    'result-age': age,
-                    'result-bmi': bmi,
-                    'preview-name': name,
-                    'preview-age': age,
-                    'preview-bmi': bmi,
-                    'preview-status': statusText
-                };
-                let missingElements = [];
-                Object.entries(resultElements).forEach(([id, value]) => {
-                    const el = document.getElementById(id);
-                    if (el) {
-                        el.textContent = value;
-                    } else {
-                        missingElements.push(id);
-                        console.warn(`Element with ID ${id} not found`);
-                    }
-                });
-
-                if (missingElements.length > 0) {
-                    throw new Error(`Missing DOM elements: ${missingElements.join(', ')}`);
-                }
-
-                const resultCard = document.querySelector('.result-card');
-                if (!resultCard) throw new Error('Result card not found');
-                resultCard.className = `result-card ${statusClass}`;
-
-                const statusBubble = document.getElementById('status-bubble');
-                if (!statusBubble) throw new Error('Status bubble not found');
-                statusBubble.className = `status-bubble ${statusClass}`;
-
-                updateResultContent(statusClass);
-
-                const shareLink = `${window.location.origin}${window.location.pathname}?name=${encodeURIComponent(name)}&age=${age}&bmi=${bmi}&status=${statusClass}&lang=${currentLang}`;
-                const shareLinkInput = document.getElementById('share-link');
-                if (shareLinkInput) shareLinkInput.value = shareLink;
-                else console.warn('Share link input not found');
-
-                const shareText = currentLang === 'en' ?
-                    `My LifePulse Scan: ${name}, Age ${age}, BMI ${bmi} (${statusText}). Check yours!` :
-                    `আমার লাইফপালস স্ক্যান: ${name}, বয়স ${age}, বিএমআই ${bmi} (${statusText})। আপনারটা পরীক্ষা করুন!`;
-                const shareLinks = {
-                    'share-twitter': `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareLink)}`,
-                    'share-facebook': `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareLink)}`,
-                    'share-whatsapp': `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareLink)}`,
-                    'share-linkedin': `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareLink)}`
-                };
-                Object.entries(shareLinks).forEach(([id, href]) => {
-                    const el = document.getElementById(id);
-                    if (el) el.href = href;
-                    else console.warn(`Share link element with ID ${id} not found`);
-                });
-
-                animateValue('result-age', 0, age, 1000);
-                animateValue('result-bmi', 0, bmi, 1000);
-
-                console.log('Showing result panel');
-                loadingPanel.style.display = 'none';
-                resultPanel.style.display = 'flex';
-                card.classList.add('result-shown');
-                document.body.classList.remove('loading');
-                document.body.classList.add(statusClass);
-                animateParticles(statusClass);
-            } catch (error) {
-                console.error('Error in result processing:', error);
-                alert(currentLang === 'en' ? `Error processing result: ${error.message}` : `ফলাফল প্রক্রিয়াকরণে ত্রুটি: ${error.message}`);
-                reset();
-            }
-        }, 2000);
-    } catch (error) {
-        console.error('Error in analyze:', error);
-        alert(currentLang === 'en' ? `Error: ${error.message}` : `ত্রুটি: ${error.message}`);
-        document.getElementById('input-panel').style.display = 'flex';
-        document.getElementById('loading-panel').style.display = 'none';
-        document.body.classList.remove('loading');
+    if (heightUnit === 'cm') {
+        heightCm = parseFloat(document.getElementById('height-cm').value);
+    } else {
+        const feet = parseFloat(document.getElementById('height-ft').value) || 0;
+        const inches = parseFloat(document.getElementById('height-in').value) || 0;
+        heightCm = (feet * 30.48) + (inches * 2.54);
     }
+
+    if (weightUnit === 'kg') {
+        weightKg = parseFloat(document.getElementById('weight-kg').value);
+    } else {
+        weightKg = parseFloat(document.getElementById('weight-lbs').value) * 0.453592;
+    }
+
+    if (!name || !birthYear || !heightCm || !weightKg) {
+        alert(currentLang === 'en' ? 'Please fill all fields.' : 'অনুগ্রহ করে সব ক্ষেত্র পূরণ করুন।');
+        return;
+    }
+
+    if (birthYear < 1900 || birthYear > 2025) {
+        alert(currentLang === 'en' ? 'Invalid birth year.' : 'অবৈধ জন্ম সাল।');
+        return;
+    }
+
+    if (heightCm < 50 || heightCm > 300 || weightKg < 10 || weightKg > 500) {
+        alert(currentLang === 'en' ? 'Invalid height or weight.' : 'অবৈধ উচ্চতা বা ওজন।');
+        return;
+    }
+
+    // Show loading
+    document.getElementById('input-panel').style.display = 'none';
+    document.getElementById('loading-panel').style.display = 'block';
+    document.getElementById('card').classList.remove('result-shown');
+    document.body.classList.remove('input-active', 'normal', 'underweight', 'overweight', 'obese');
+    document.body.classList.add('loading');
+
+    setTimeout(() => {
+        // Calculate age and BMI
+        const currentYear = 2025;
+        const age = currentYear - birthYear;
+        const heightM = heightCm / 100;
+        const bmi = (weightKg / (heightM * heightM)).toFixed(1);
+
+        // Determine status
+        let statusClass;
+        if (bmi < 18.5) {
+            statusClass = 'underweight';
+        } else if (bmi >= 18.5 && bmi < 25) {
+            statusClass = 'normal';
+        } else if (bmi >= 25 && bmi < 30) {
+            statusClass = 'overweight';
+        } else {
+            statusClass = 'obese';
+        }
+
+        // Update result panel
+        document.getElementById('result-name').textContent = name;
+        document.getElementById('result-age').textContent = age;
+        document.getElementById('result-bmi').textContent = bmi;
+        const resultCard = document.querySelector('.result-card');
+        resultCard.className = `result-card ${statusClass}`;
+        document.getElementById('status-bubble').className = `status-bubble ${statusClass}`;
+
+        // Update UI with language content
+        updateUI(statusClass);
+
+        // Update share preview
+        document.getElementById('preview-name').textContent = name;
+        document.getElementById('preview-age').textContent = age;
+        document.getElementById('preview-bmi').textContent = bmi;
+
+        // Animate age and BMI
+        animateValue('result-age', 0, age, 1000);
+        animateValue('result-bmi', 0, bmi, 1000);
+
+        // Show result
+        document.getElementById('loading-panel').style.display = 'none';
+        document.getElementById('result-panel').style.display = 'flex';
+        document.getElementById('card').classList.add('result-shown');
+        document.body.classList.remove('loading');
+        document.body.classList.add(statusClass);
+        animateParticles(statusClass);
+    }, 2000);
 }
 
 function copyLink() {
     const shareLink = document.getElementById('share-link');
-    if (!shareLink) {
-        alert(currentLang === 'en' ? 'Share link not found!' : 'শেয়ার লিঙ্ক পাওয়া যায়নি!');
-        return;
-    }
     shareLink.select();
     document.execCommand('copy');
     alert(currentLang === 'en' ? 'Link copied to clipboard!' : 'লিঙ্ক ক্লিপবোর্ডে কপি করা হয়েছে!');
 }
 
 function animateValue(id, start, end, duration) {
-    const el = document.getElementById(id);
-    if (!el) {
-        console.warn(`Element with ID ${id} not found for animation`);
-        return;
-    }
     let startTimestamp = null;
     const step = (timestamp) => {
         if (!startTimestamp) startTimestamp = timestamp;
         const progress = Math.min((timestamp - startTimestamp) / duration, 1);
         const value = start + progress * (end - start);
-        el.textContent = value.toFixed(id === 'result-bmi' ? 1 : 0);
+        document.getElementById(id).textContent = value.toFixed(id === 'result-bmi' ? 1 : 0);
         if (progress < 1) {
             requestAnimationFrame(step);
         }
@@ -443,52 +393,34 @@ function animateValue(id, start, end, duration) {
 }
 
 function reset() {
-    const resultPanel = document.getElementById('result-panel');
-    const inputPanel = document.getElementById('input-panel');
-    const loadingPanel = document.getElementById('loading-panel');
-    const card = document.getElementById('card');
-
-    if (resultPanel) resultPanel.style.display = 'none';
-    if (inputPanel) inputPanel.style.display = 'flex';
-    if (loadingPanel) loadingPanel.style.display = 'none';
-    if (card) card.classList.remove('result-shown');
-
+    document.getElementById('result-panel').style.display = 'none';
+    document.getElementById('input-panel').style.display = 'flex';
+    document.getElementById('card').classList.remove('result-shown');
     document.body.classList.remove('input-active', 'normal', 'underweight', 'overweight', 'obese');
-
-    const inputs = ['name', 'birth-year', 'height-cm', 'height-ft', 'height-in', 'weight-kg', 'weight-lbs'];
-    inputs.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.value = '';
-    });
-
-    const selects = ['height-unit', 'weight-unit'];
-    selects.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.value = id === 'height-unit' ? 'ft/in' : 'kg';
-    });
-
-    const heightCm = document.getElementById('height-cm');
-    const heightFt = document.getElementById('height-ft');
-    const heightIn = document.getElementById('height-in');
-    const weightKg = document.getElementById('weight-kg');
-    const weightLbs = document.getElementById('weight-lbs');
-
-    if (heightCm) heightCm.style.display = 'none';
-    if (heightFt) heightFt.style.display = 'block';
-    if (heightIn) heightIn.style.display = 'block';
-    if (weightKg) weightKg.style.display = 'block';
-    if (weightLbs) weightLbs.style.display = 'none';
-
+    document.getElementById('name').value = '';
+    document.getElementById('birth-year').value = '';
+    document.getElementById('height-cm').value = '';
+    document.getElementById('height-ft').value = '';
+    document.getElementById('height-in').value = '';
+    document.getElementById('weight-kg').value = '';
+    document.getElementById('weight-lbs').value = '';
+    document.getElementById('height-unit').value = 'ft-in';
+    document.getElementById('weight-unit').value = 'kg';
+    document.getElementById('height-cm').style.display = 'none';
+    document.getElementById('height-ft').style.display = 'block';
+    document.getElementById('height-in').style.display = 'block';
+    document.getElementById('weight-kg').style.display = 'block';
+    document.getElementById('weight-lbs').style.display = 'none';
     currentLang = 'en';
     document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-    const enBtn = document.querySelector('.lang-btn[onclick="toggleLanguage(\'en\')]');
-    if (enBtn) enBtn.classList.add('active');
-
-    updateLanguage();
+    document.querySelector('.lang-btn[onclick="toggleLanguage(\'en\')"]').classList.add('active');
+    updateUI();
     animateParticles('initial');
 }
 
+// Handle shared link
 window.onload = () => {
+    updateUI(); // Initialize UI with default language
     const params = new URLSearchParams(window.location.search);
     if (params.has('name') && params.has('age') && params.has('bmi') && params.has('status')) {
         const name = params.get('name');
@@ -497,72 +429,25 @@ window.onload = () => {
         const statusClass = params.get('status');
         currentLang = params.get('lang') || 'en';
 
-        const inputPanel = document.getElementById('input-panel');
-        const resultPanel = document.getElementById('result-panel');
-        const card = document.getElementById('card');
-
-        if (inputPanel) inputPanel.style.display = 'none';
-        if (resultPanel) resultPanel.style.display = 'flex';
-        if (card) card.classList.add('result-shown');
-
+        document.getElementById('input-panel').style.display = 'none';
+        document.getElementById('result-panel').style.display = 'flex';
+        document.getElementById('card').classList.add('result-shown');
         document.body.classList.add(statusClass);
         animateParticles(statusClass);
 
-        const resultElements = {
-            'result-name': name,
-            'result-age': age,
-            'result-bmi': bmi,
-            'preview-name': name,
-            'preview-age': age,
-            'preview-bmi': bmi,
-            'preview-status': langData[currentLang][statusClass].status
-        };
-        let missingElements = [];
-        Object.entries(resultElements).forEach(([id, value]) => {
-            const el = document.getElementById(id);
-            if (el) el.textContent = value;
-            else missingElements.push(id);
-        });
+        document.getElementById('result-name').textContent = name;
+        document.getElementById('result-age').textContent = age;
+        document.getElementById('result-bmi').textContent = bmi;
+        document.querySelector('.result-card').className = `result-card ${statusClass}`;
+        document.getElementById('status-bubble').className = `status-bubble ${statusClass}`;
 
-        if (missingElements.length > 0) {
-            console.error(`Missing DOM elements for shared link: ${missingElements.join(', ')}`);
-            alert(currentLang === 'en' ? 'Error loading shared results: Missing elements' : 'শেয়ার করা ফলাফল লোড করতে ত্রুটি: উপাদান অনুপস্থিত');
-            reset();
-            return;
-        }
+        document.getElementById('preview-name').textContent = name;
+        document.getElementById('preview-age').textContent = age;
+        document.getElementById('preview-bmi').textContent = bmi;
 
-        const resultCard = document.querySelector('.result-card');
-        if (resultCard) resultCard.className = `result-card ${statusClass}`;
+        updateUI(statusClass);
 
-        const statusBubble = document.getElementById('status-bubble');
-        if (statusBubble) statusBubble.className = `status-bubble ${statusClass}`;
-
-        updateLanguage(statusClass);
-
-        const shareLink = window.location.href;
-        const shareLinkInput = document.getElementById('share-link');
-        if (shareLinkInput) shareLinkInput.value = shareLink;
-
-        const shareText = currentLang === 'en' ?
-            `My LifePulse Scan: ${name}, Age ${age}, BMI ${bmi} (${langData[currentLang][statusClass].status}). Check yours!` :
-            `আমার লাইফপালস স্ক্যান: ${name}, বয়স ${age}, বিএমআই ${bmi} (${langData[currentLang][statusClass].status})। আপনারটা পরীক্ষা করুন!`;
-        const shareLinks = {
-            'share-twitter': `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareLink)}`,
-            'share-facebook': `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareLink)}`,
-            'share-whatsapp': `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareLink)}`,
-            'share-linkedin': `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareLink)}`
-        };
-        Object.entries(shareLinks).forEach(([id, href]) => {
-            const el = document.getElementById(id);
-            if (el) el.href = href;
-        });
-
-        const langBtn = document.querySelector(`.lang-btn[onclick="toggleLanguage('${currentLang}')"]`);
-        if (langBtn) {
-            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-            langBtn.classList.add('active');
-        }
-    } else {
-        updateLanguage();
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`.lang-btn[onclick="toggleLanguage('${currentLang}')"]`).classList.add('active');
     }
 };
