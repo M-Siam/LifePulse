@@ -1,0 +1,187 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="LifePulse Scan">
+    <meta property="og:description" content="Discover your LifePulse: Age & BMI Analysis with a Futuristic Twist!">
+    <meta property="og:image" content="https://i.ibb.co/7yJqZ0z/lifepulse-preview.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://i.ibb.co/7yJqZ0z/lifepulse-preview.jpg">
+    <meta name="twitter:title" content="LifePulse Scan">
+    <meta name="twitter:description" content="Discover your LifePulse: Age & BMI Analysis with a Futuristic Twist!">
+    <title>LifePulse – Futuristic Age & BMI Analyzer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <canvas id="particle-canvas"></canvas>
+    <div class="container">
+        <div class="card" id="card">
+            <div class="mode-toggle">
+                <input type="checkbox" id="mode-switch">
+                <label for="mode-switch">Light/Dark</label>
+            </div>
+            <h1 class="title" id="title">LifePulse</h1>
+            <p class="subtitle" id="subtitle">Analyzing Your Life Energy...</p>
+            <div class="input-panel" id="input-panel">
+                <div class="input-group">
+                    <input type="text" id="name" required>
+                    <label id="label-name-input">Name</label>
+                    <span class="tooltip">Enter your full name</span>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="birth-year" required min="1900" max="2025">
+                    <label id="label-birth-year">Birth Year</label>
+                    <span class="tooltip">Enter year (e.g., 1990)</span>
+                </div>
+                <div class="input-group">
+                    <div class="unit-input">
+                        <input type="number" id="height-ft" placeholder="Feet">
+                        <input type="number" id="height-in" placeholder="Inches">
+                        <input type="number" id="height-cm" placeholder="Height in cm" style="display: none;">
+                        <select id="height-unit">
+                            <option value="ft-in">ft/in</option>
+                            <option value="cm">cm</option>
+                        </select>
+                    </div>
+                    <label id="label-height">Height</label>
+                    <span class="tooltip">Select unit (ft/in or cm) and enter height</span>
+                </div>
+                <div class="input-group">
+                    <div class="unit-input">
+                        <input type="number" id="weight-kg" placeholder="Weight in kg">
+                        <input type="number" id="weight-lbs" placeholder="Weight in lbs" style="display: none;">
+                        <select id="weight-unit">
+                            <option value="kg">kg</option>
+                            <option value="lbs">lbs</option>
+                        </select>
+                    </div>
+                    <label id="label-weight">Weight</label>
+                    <span class="tooltip">Select unit (kg or lbs) and enter weight</span>
+                </div>
+                <div class="button-container">
+                    <button class="submit-btn" onclick="analyze()">Analyze</button>
+                </div>
+            </div>
+            <div class="loading-panel" id="loading-panel" style="display: none;">
+                <div class="loader">
+                    <div class="neon-ring"></div>
+                    <span class="loading-text" id="loading-text">Scanning Life Energy...</span>
+                </div>
+            </div>
+            <div class="result-panel" id="result-panel" style="display: none;">
+                <div class="lang-toggle">
+                    <button class="lang-btn active" onclick="toggleLanguage('en')">EN</button>
+                    <button class="lang-btn" onclick="toggleLanguage('bn')">BN</button>
+                </div>
+                <h2 class="result-title" id="result-title">Life Energy Scan</h2>
+                <div class="result-card">
+                    <div class="result-item">
+                        <span id="label-name">Name:</span> <span id="result-name"></span>
+                    </div>
+                    <div class="result-item">
+                        <span id="label-age">Age:</span> <span id="result-age">0</span> <span id="label-years">years</span>
+                    </div>
+                    <div class="result-item">
+                        <span id="label-bmi">BMI:</span> <span id="result-bmi">0</span>
+                    </div>
+                    <div class="status-bubble" id="status-bubble">
+                        <div class="bubble-ring"></div>
+                    </div>
+                    <div class="health-tip">
+                        <div class="health-column left">
+                            <h3 id="health-directive">Health Directive</h3>
+                            <p id="tip-text"></p>
+                            <p id="tip-reason"></p>
+                            <h3 id="why-happened">Why This Happened</h3>
+                            <p id="why-text"></p>
+                            <h3 id="good-aspects">Good Aspects</h3>
+                            <p id="good-text"></p>
+                        </div>
+                        <div class="health-column right">
+                            <h3 id="bad-aspects">Bad Aspects</h3>
+                            <p id="bad-text"></p>
+                            <h3 id="future-instructions">Future Instructions</h3>
+                            <p id="future-text"></p>
+                        </div>
+                    </div>
+                    <div class="share-section">
+                        <h3 id="share-results">Share Your Results</h3>
+                        <div class="share-preview">
+                            <div class="preview-card">
+                                <h4 id="preview-title">LifePulse Scan</h4>
+                                <p><span id="preview-name"></span></p>
+                                <p><span id="preview-age"></span> <span id="preview-years">years</span></p>
+                                <p>BMI: <span id="preview-bmi"></span></p>
+                                <p id="preview-status"></p>
+                            </div>
+                        </div>
+                        <input type="text" id="share-link" readonly>
+                        <button class="copy-btn" onclick="copyLink()">Copy Link</button>
+                        <div class="share-icons">
+                            <a href="#" id="share-facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" id="share-instagram" onclick="instagramShare()"><i class="fab fa-instagram"></i></a>
+                            <a href="#" id="share-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                            <a href="#" id="share-telegram" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+                            <a href="#" id="share-x" target="_blank"><i class="fab fa-x-twitter"></i></a>
+                            <a href="#" id="share-reddit" target="_blank"><i class="fab fa-reddit-alien"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button class="reset-btn" onclick="reset()">Reset</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="credit">CRAFTED BY SIAM 🌌</div>
+        </div>
+        <div class="alert" id="copy-alert" style="display: none;"></div>
+    </div>
+    <script src="script.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
+</html>
