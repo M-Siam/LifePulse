@@ -20,6 +20,15 @@ body.dark {
     background: linear-gradient(135deg, #1a1a1a, #2e2e2e);
 }
 
+#particle-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
 body::before {
     content: '';
     position: absolute;
@@ -27,14 +36,42 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle, rgba(0, 123, 255, 0.2) 10%, transparent 10.01%);
-    background-size: 20px 20px;
+    background: linear-gradient(45deg, transparent, rgba(0, 123, 255, 0.2), transparent);
     opacity: 0.3;
-    animation: particleMove 20s linear infinite;
+    animation: wave 10s infinite;
+    z-index: 1;
 }
 
 body.dark::before {
-    background: radial-gradient(circle, rgba(0, 255, 136, 0.2) 10%, transparent 10.01%);
+    background: linear-gradient(45deg, transparent, rgba(0, 255, 136, 0.2), transparent);
+}
+
+body.input-active::before {
+    animation: wave 5s infinite;
+}
+
+body.loading::before {
+    animation: wave 2s infinite, flicker 0.5s infinite;
+}
+
+body.normal::before {
+    background: linear-gradient(45deg, transparent, rgba(40, 167, 69, 0.2), transparent);
+    animation: wave 8s infinite;
+}
+
+body.underweight::before {
+    background: linear-gradient(45deg, transparent, rgba(255, 193, 7, 0.2), transparent);
+    animation: wave 4s infinite, flicker 1s infinite;
+}
+
+body.overweight::before {
+    background: linear-gradient(45deg, transparent, rgba(220, 53, 69, 0.2), transparent);
+    animation: wave 3s infinite, flicker 0.7s infinite;
+}
+
+body.obese::before {
+    background: linear-gradient(45deg, transparent, rgba(255, 87, 34, 0.2), transparent);
+    animation: wave 2s infinite, flicker 0.4s infinite;
 }
 
 .container {
@@ -42,7 +79,7 @@ body.dark::before {
     padding: 20px;
     width: 100%;
     max-width: 600px;
-    z-index: 1;
+    z-index: 2;
 }
 
 .mode-toggle {
@@ -127,27 +164,6 @@ body.dark .card.result-shown {
     background: rgba(0, 0, 0, 0.7);
     border: 1px solid #00ff88;
     box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
-}
-
-.card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(45deg, transparent, rgba(0, 123, 255, 0.2), transparent);
-    opacity: 0;
-    transition: opacity 0.5s;
-}
-
-.card.result-shown::before {
-    opacity: 1;
-    animation: pulseGradient 3s infinite;
-}
-
-body.dark .card::before {
-    background: linear-gradient(45deg, transparent, rgba(0, 255, 136, 0.2), transparent);
 }
 
 .title {
@@ -273,7 +289,7 @@ body.dark .input-group .tooltip {
     justify-content: center;
 }
 
-.submit-btn, .reset-btn {
+.submit-btn, .reset-btn, .copy-btn {
     padding: 12px 40px;
     background: linear-gradient(135deg, #007bff, #00d4ff);
     border: none;
@@ -286,15 +302,15 @@ body.dark .input-group .tooltip {
     transition: transform 0.3s;
 }
 
-body.dark .submit-btn, body.dark .reset-btn {
+body.dark .submit-btn, body.dark .reset-btn, body.dark .copy-btn {
     background: linear-gradient(135deg, #00ff88, #00d4ff);
 }
 
-.submit-btn:hover, .reset-btn:hover {
+.submit-btn:hover, .reset-btn:hover, .copy-btn:hover {
     transform: scale(1.05);
 }
 
-.submit-btn::before, .reset-btn::before {
+.submit-btn::before, .reset-btn::before, .copy-btn::before {
     content: '';
     position: absolute;
     top: 50%;
@@ -307,7 +323,7 @@ body.dark .submit-btn, body.dark .reset-btn {
     transition: width 0.6s, height 0.6s;
 }
 
-.submit-btn:hover::before, .reset-btn:hover::before {
+.submit-btn:hover::before, .reset-btn:hover::before, .copy-btn:hover::before {
     width: 200px;
     height: 200px;
 }
@@ -427,9 +443,78 @@ body.dark .health-tip {
     color: #fff;
 }
 
-@keyframes particleMove {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-100px); }
+.share-section {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.share-section h3 {
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+body.dark .share-section h3 {
+    color: #00ff88;
+}
+
+#share-link {
+    width: 100%;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    color: #333;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+body.dark #share-link {
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid #00ff88;
+    color: #fff;
+}
+
+.copy-btn {
+    padding: 8px 20px;
+    font-size: 0.9rem;
+}
+
+.share-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.share-icons a {
+    color: #007bff;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+body.dark .share-icons a {
+    color: #00ff88;
+}
+
+.share-icons a:hover {
+    transform: scale(1.2);
+    text-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+
+body.dark .share-icons a:hover {
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+@keyframes wave {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(-100px); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes flicker {
+    0% { opacity: 0.3; }
+    50% { opacity: 0.5; }
+    100% { opacity: 0.3; }
 }
 
 @keyframes fadeIn {
@@ -462,12 +547,6 @@ body.dark @keyframes glow {
     100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
 }
 
-@keyframes pulseGradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
@@ -498,7 +577,8 @@ body.dark @keyframes glow {
     .card { padding: 20px; }
     .title { font-size: 2rem; }
     .result-title { font-size: 1.5rem; }
-    .submit-btn, .reset-btn { font-size: 0.9rem; padding: 10px 30px; }
+    .submit-btn, .reset-btn, .copy-btn { font-size: 0.9rem; padding: 10px 30px; }
     .unit-input { flex-direction: column; gap: 5px; }
     .unit-input select { width: 100%; }
+    .share-icons a { font-size: 1.2rem; }
 }
