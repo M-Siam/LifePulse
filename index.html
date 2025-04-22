@@ -15,17 +15,17 @@
                 <label for="mode-switch">Light/Dark</label>
             </div>
             <h1 class="title">LifePulse</h1>
-            <p class="subtitle">Analyzing Your Life Energy...</p>
+            <p class="subtitle" data-lang="subtitle">Analyzing Your Life Energy...</p>
             <div class="input-panel" id="input-panel">
                 <div class="input-group">
                     <input type="text" id="name" required>
-                    <label>Name</label>
-                    <span class="tooltip">Enter your full name</span>
+                    <label data-lang="name-label">Name</label>
+                    <span class="tooltip" data-lang="name-tooltip">Enter your full name</span>
                 </div>
                 <div class="input-group">
                     <input type="number" id="birth-year" required min="1900" max="2025">
-                    <label>Birth Year</label>
-                    <span class="tooltip">Enter year (e.g., 1990)</span>
+                    <label data-lang="birth-year-label">Birth Year</label>
+                    <span class="tooltip" data-lang="birth-year-tooltip">Enter year (e.g., 1990)</span>
                 </div>
                 <div class="input-group">
                     <div class="unit-input">
@@ -33,12 +33,12 @@
                         <input type="number" id="height-in" placeholder="Inches">
                         <input type="number" id="height-cm" placeholder="Height in cm" style="display: none;">
                         <select id="height-unit">
-                            <option value="ft-in">ft/in</option>
+                            <option value="ft/in">ft/in</option>
                             <option value="cm">cm</option>
                         </select>
                     </div>
-                    <label>Height</label>
-                    <span class="tooltip">Select unit and enter height</span>
+                    <label data-lang="height-label">Height</label>
+                    <span class="tooltip" data-lang="height-tooltip">Select unit and enter height</span>
                 </div>
                 <div class="input-group">
                     <div class="unit-input">
@@ -49,64 +49,64 @@
                             <option value="lbs">lbs</option>
                         </select>
                     </div>
-                    <label>Weight</label>
-                    <span class="tooltip">Select unit and enter weight</span>
+                    <label data-lang="weight-label">Weight</label>
+                    <span class="tooltip" data-lang="weight-tooltip">Select unit and enter weight</span>
                 </div>
                 <div class="button-container">
-                    <button class="submit-btn" onclick="analyze()">Analyze</button>
+                    <button class="submit-btn" onclick="analyze()" data-lang="analyze-btn">Analyze</button>
                 </div>
             </div>
             <div class="loading-panel" id="loading-panel" style="display: none;">
                 <div class="loader">
                     <div class="neon-ring"></div>
-                    <span class="loading-text">Scanning Life Energy...</span>
+                    <span class="loading-text" data-lang="loading-text">Scanning Life Energy...</span>
                 </div>
             </div>
             <div class="result-panel" id="result-panel" style="display: none;">
                 <div class="lang-toggle">
-                    <button class="lang-btn" onclick="toggleLanguage('en')">EN</button>
+                    <button class="lang-btn active" onclick="toggleLanguage('en')">EN</button>
                     <button class="lang-btn" onclick="toggleLanguage('bn')">BN</button>
                 </div>
-                <h2 class="result-title">Life Energy Scan</h2>
+                <h2 class="result-title" data-lang="result-title">Life Energy Scan</h2>
                 <div class="result-card">
                     <div class="result-item">
-                        <span id="label-name">Name:</span> <span id="result-name"></span>
+                        <span data-lang="name">Name:</span> <span id="result-name"></span>
                     </div>
                     <div class="result-item">
-                        <span id="label-age">Age:</span> <span id="result-age">0</span> <span id="label-years">years</span>
+                        <span data-lang="age">Age:</span> <span id="result-age">0</span> <span data-lang="years">years</span>
                     </div>
                     <div class="result-item">
-                        <span id="label-bmi">BMI:</span> <span id="result-bmi">0</span>
+                        <span data-lang="bmi">BMI:</span> <span id="result-bmi">0</span>
                     </div>
                     <div class="status-bubble" id="status-bubble">
                         <div class="bubble-ring"></div>
                     </div>
                     <div class="health-tip">
-                        <h3 id="health-directive">Health Directive</h3>
+                        <h3 data-lang="health-directive">Health Directive</h3>
                         <p id="tip-text"></p>
                         <p id="tip-reason"></p>
-                        <h3 id="why-happened">Why This Happened</h3>
+                        <h3 data-lang="why-happened">Why This Happened</h3>
                         <p id="why-text"></p>
-                        <h3 id="good-aspects">Good Aspects</h3>
+                        <h3 data-lang="good-aspects">Good Aspects</h3>
                         <p id="good-text"></p>
-                        <h3 id="bad-aspects">Bad Aspects</h3>
+                        <h3 data-lang="bad-aspects">Bad Aspects</h3>
                         <p id="bad-text"></p>
-                        <h3 id="future-instructions">Future Instructions</h3>
+                        <h3 data-lang="future-instructions">Future Instructions</h3>
                         <p id="future-text"></p>
                     </div>
                     <div class="share-section">
-                        <h3 id="share-results">Share Your Results</h3>
+                        <h3 data-lang="share-results">Share Your Results</h3>
                         <div class="share-preview">
                             <div class="preview-card">
-                                <h4 id="preview-title">LifePulse Scan</h4>
+                                <h4 data-lang="preview-title">LifePulse Scan</h4>
                                 <p><span id="preview-name"></span></p>
-                                <p><span id="preview-age"></span> <span id="preview-years">years</span></p>
-                                <p>BMI: <span id="preview-bmi"></span></p>
+                                <p><span id="preview-age"></span> <span data-lang="preview-years">years</span></p>
+                                <p data-lang="preview-bmi">BMI: <span id="preview-bmi"></span></p>
                                 <p id="preview-status"></p>
                             </div>
                         </div>
                         <input type="text" id="share-link" readonly>
-                        <button class="copy-btn" onclick="copyLink()">Copy Link</button>
+                        <button class="copy-btn" onclick="copyLink()" data-lang="copy-btn">Copy Link</button>
                         <div class="share-icons">
                             <a href="#" id="share-twitter" target="_blank"><i class="fab fa-twitter"></i></a>
                             <a href="#" id="share-facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
@@ -116,10 +116,10 @@
                     </div>
                 </div>
                 <div class="button-container">
-                    <button class="reset-btn" onclick="reset()">Reset</button>
+                    <button class="reset-btn" onclick="reset()" data-lang="reset-btn">Reset</button>
                 </div>
             </div>
-            <div class="credit">Crafted by Siam</div>
+            <div class="credit">CRAFTED BY SIAM 🚀✨</div>
         </div>
     </div>
     <script src="script.js"></script>
