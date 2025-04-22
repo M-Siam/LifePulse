@@ -5,7 +5,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let particles = [];
-const particleCount = 50; // Reduced from 100 to improve performance
+const particleCount = 50;
 
 class Particle {
     constructor() {
@@ -216,19 +216,26 @@ function updateLanguage(status) {
         }
     });
     if (status || document.querySelector('.result-card')) {
-        updateResultContent(status || document.querySelector('.result-card').className.split(' ')[1] || 'normal');
+        updateResultContent(status || document.querySelector('.result-card')?.className.split(' ')[1] || 'normal');
     }
 }
 
 function updateResultContent(status) {
     const data = langData[currentLang][status];
-    document.getElementById('tip-text').textContent = data.tip;
-    document.getElementById('tip-reason').textContent = data.reason;
-    document.getElementById('why-text').textContent = data.why;
-    document.getElementById('good-text').textContent = data.good;
-    document.getElementById('bad-text').textContent = data.bad;
-    document.getElementById('future-text').textContent = data.future;
-    document.getElementById('preview-status').textContent = data.status;
+    const elements = {
+        'tip-text': data.tip,
+        'tip-reason': data.reason,
+        'why-text': data.why,
+        'good-text': data.good,
+        'bad-text': data.bad,
+        'future-text': data.future,
+        'preview-status': data.status
+    };
+    Object.entries(elements).forEach(([id, value]) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+        else console.warn(`Element with ID ${id} not found`);
+    });
 }
 
 // Event Listeners
@@ -256,7 +263,7 @@ document.querySelectorAll('.input-panel input').forEach(input => {
 });
 
 function analyze() {
-    console.log('analyze() started'); // Debug log
+    console.log('analyze() started');
     try {
         const name = document.getElementById('name').value.trim();
         const birthYear = parseInt(document.getElementById('birth-year').value);
@@ -265,7 +272,6 @@ function analyze() {
 
         let heightCm, weightKg;
 
-        // Handle height input
         if (heightUnit === 'cm') {
             heightCm = parseFloat(document.getElementById('height-cm').value) || 0;
         } else {
@@ -274,14 +280,12 @@ function analyze() {
             heightCm = (feet * 30.48) + (inches * 2.54);
         }
 
-        // Handle weight input
         if (weightUnit === 'kg') {
             weightKg = parseFloat(document.getElementById('weight-kg').value) || 0;
         } else {
             weightKg = (parseFloat(document.getElementById('weight-lbs').value) || 0) * 0.453592;
         }
 
-        // Simplified validation
         if (!name) {
             throw new Error(currentLang === 'en' ? 'Name is required.' : 'নাম প্রয়োজন।');
         }
@@ -295,8 +299,7 @@ function analyze() {
             throw new Error(currentLang === 'en' ? 'Invalid weight (must be between 10–500 kg).' : 'অবৈধ ওজন (১০–৫০০ কেজি হতে হবে)।');
         }
 
-        // Show loading
-        console.log('Showing loading panel'); // Debug log
+        console.log('Showing loading panel');
         const inputPanel = document.getElementById('input-panel');
         const loadingPanel = document.getElementById('loading-panel');
         const resultPanel = document.getElementById('result-panel');
@@ -304,21 +307,19 @@ function analyze() {
 
         inputPanel.style.display = 'none';
         loadingPanel.style.display = 'block';
-        resultPanel.style.display = 'none'; // Ensure result is hidden
+        resultPanel.style.display = 'none';
         card.classList.remove('result-shown');
         document.body.classList.remove('input-active', 'normal', 'underweight', 'overweight', 'obese');
         document.body.classList.add('loading');
 
         setTimeout(() => {
             try {
-                console.log('Processing result'); // Debug log
-                // Calculate age and BMI
+                console.log('Processing result');
                 const currentYear = 2025;
                 const age = currentYear - birthYear;
                 const heightM = heightCm / 100;
                 const bmi = (weightKg / (heightM * heightM)).toFixed(1);
 
-                // Determine status
                 let statusClass, statusText;
                 if (bmi < 18.5) {
                     statusClass = 'underweight';
@@ -334,40 +335,69 @@ function analyze() {
                     statusText = langData[currentLang].obese.status;
                 }
 
-                // Update result panel
-                document.getElementById('result-name').textContent = name;
-                document.getElementById('result-age').textContent = age;
-                document.getElementById('result-bmi').textContent = bmi;
-                const resultCard = document.querySelector('.result-card');
-                resultCard.className = `result-card ${statusClass}`;
-                document.getElementById('status-bubble').className = `status-bubble ${statusClass}`;
-                updateResultContent(statusClass);
+                // Update result panel with null checks
+                const resultElements = {
+                    'result-name': name,
+                    'result-age': age,
+                    'result-bmi': bmi,
+                    'preview-name': name,
+                    'preview-age': age,
+                    'preview-bmi': bmi,
+                    'preview-status': statusText
+                };
+                let missingElements = [];
+                Object.entries(resultElements).forEach(([id, value]) => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.textContent = value;
+                    } else {
+                        missingElements.push(id);
+                        console.warn(`Element with ID ${id} not found`);
+                    }
+                });
 
-                // Update share preview
-                document.getElementById('preview-name').textContent = name;
-                document.getElementById('preview-age').textContent = age;
-                document.getElementById('preview-bmi').textContent = bmi;
-                document.getElementById('preview-status').textContent = statusText;
+                if (missingElements.length > 0) {
+                    throw new Error(`Missing DOM elements: ${missingElements.join(', ')}`);
+                }
+
+                const resultCard = document.querySelector('.result-card');
+                if (!resultCard) throw new Error('Result card not found');
+                resultCard.className = `result-card ${statusClass}`;
+
+                const statusBubble = document.getElementById('status-bubble');
+                if (!statusBubble) throw new Error('Status bubble not found');
+                statusBubble.className = `status-bubble ${statusClass}`;
+
+                updateResultContent(statusClass);
 
                 // Generate share link
                 const shareLink = `${window.location.origin}${window.location.pathname}?name=${encodeURIComponent(name)}&age=${age}&bmi=${bmi}&status=${statusClass}&lang=${currentLang}`;
-                document.getElementById('share-link').value = shareLink;
+                const shareLinkInput = document.getElementById('share-link');
+                if (shareLinkInput) shareLinkInput.value = shareLink;
+                else console.warn('Share link input not found');
 
                 // Update share icons
                 const shareText = currentLang === 'en' ?
                     `My LifePulse Scan: ${name}, Age ${age}, BMI ${bmi} (${statusText}). Check yours!` :
                     `আমার লাইফপালস স্ক্যান: ${name}, বয়স ${age}, বিএমআই ${bmi} (${statusText})। আপনারটা পরীক্ষা করুন!`;
-                document.getElementById('share-twitter').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareLink)}`;
-                document.getElementById('share-facebook').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareLink)}`;
-                document.getElementById('share-whatsapp').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareLink)}`;
-                document.getElementById('share-linkedin').href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareLink)}`;
+                const shareLinks = {
+                    'share-twitter': `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareLink)}`,
+                    'share-facebook': `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareLink)}`,
+                    'share-whatsapp': `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareLink)}`,
+                    'share-linkedin': `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareLink)}`
+                };
+                Object.entries(shareLinks).forEach(([id, href]) => {
+                    const el = document.getElementById(id);
+                    if (el) el.href = href;
+                    else console.warn(`Share link element with ID ${id} not found`);
+                });
 
                 // Animate age and BMI
                 animateValue('result-age', 0, age, 1000);
                 animateValue('result-bmi', 0, bmi, 1000);
 
                 // Show result
-                console.log('Showing result panel'); // Debug log
+                console.log('Showing result panel');
                 loadingPanel.style.display = 'none';
                 resultPanel.style.display = 'flex';
                 card.classList.add('result-shown');
@@ -377,7 +407,7 @@ function analyze() {
             } catch (error) {
                 console.error('Error in result processing:', error);
                 alert(currentLang === 'en' ? `Error processing result: ${error.message}` : `ফলাফল প্রক্রিয়াকরণে ত্রুটি: ${error.message}`);
-                reset(); // Reset UI on error
+                reset();
             }
         }, 2000);
     } catch (error) {
@@ -391,18 +421,27 @@ function analyze() {
 
 function copyLink() {
     const shareLink = document.getElementById('share-link');
+    if (!shareLink) {
+        alert(currentLang === 'en' ? 'Share link not found!' : 'শেয়ার লিঙ্ক পাওয়া যায়নি!');
+        return;
+    }
     shareLink.select();
     document.execCommand('copy');
     alert(currentLang === 'en' ? 'Link copied to clipboard!' : 'লিঙ্ক ক্লিপবোর্ডে কপি করা হয়েছে!');
 }
 
 function animateValue(id, start, end, duration) {
+    const el = document.getElementById(id);
+    if (!el) {
+        console.warn(`Element with ID ${id} not found for animation`);
+        return;
+    }
     let startTimestamp = null;
     const step = (timestamp) => {
         if (!startTimestamp) startTimestamp = timestamp;
         const progress = Math.min((timestamp - startTimestamp) / duration, 1);
         const value = start + progress * (end - start);
-        document.getElementById(id).textContent = value.toFixed(id === 'result-bmi' ? 1 : 0);
+        el.textContent = value.toFixed(id === 'result-bmi' ? 1 : 0);
         if (progress < 1) {
             requestAnimationFrame(step);
         }
@@ -411,28 +450,47 @@ function animateValue(id, start, end, duration) {
 }
 
 function reset() {
-    document.getElementById('result-panel').style.display = 'none';
-    document.getElementById('input-panel').style.display = 'flex';
-    document.getElementById('loading-panel').style.display = 'none';
-    document.getElementById('card').classList.remove('result-shown');
+    const resultPanel = document.getElementById('result-panel');
+    const inputPanel = document.getElementById('input-panel');
+    const loadingPanel = document.getElementById('loading-panel');
+    const card = document.getElementById('card');
+
+    if (resultPanel) resultPanel.style.display = 'none';
+    if (inputPanel) inputPanel.style.display = 'flex';
+    if (loadingPanel) loadingPanel.style.display = 'none';
+    if (card) card.classList.remove('result-shown');
+
     document.body.classList.remove('input-active', 'normal', 'underweight', 'overweight', 'obese');
-    document.getElementById('name').value = '';
-    document.getElementById('birth-year').value = '';
-    document.getElementById('height-cm').value = '';
-    document.getElementById('height-ft').value = '';
-    document.getElementById('height-in').value = '';
-    document.getElementById('weight-kg').value = '';
-    document.getElementById('weight-lbs').value = '';
-    document.getElementById('height-unit').value = 'ft/in';
-    document.getElementById('weight-unit').value = 'kg';
-    document.getElementById('height-cm').style.display = 'none';
-    document.getElementById('height-ft').style.display = 'block';
-    document.getElementById('height-in').style.display = 'block';
-    document.getElementById('weight-kg').style.display = 'block';
-    document.getElementById('weight-lbs').style.display = 'none';
+
+    const inputs = ['name', 'birth-year', 'height-cm', 'height-ft', 'height-in', 'weight-kg', 'weight-lbs'];
+    inputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+
+    const selects = ['height-unit', 'weight-unit'];
+    selects.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = id === 'height-unit' ? 'ft/in' : 'kg';
+    });
+
+    const heightCm = document.getElementById('height-cm');
+    const heightFt = document.getElementById('height-ft');
+    const heightIn = document.getElementById('height-in');
+    const weightKg = document.getElementById('weight-kg');
+    const weightLbs = document.getElementById('weight-lbs');
+
+    if (heightCm) heightCm.style.display = 'none';
+    if (heightFt) heightFt.style.display = 'block';
+    if (heightIn) heightIn.style.display = 'block';
+    if (weightKg) weightKg.style.display = 'block';
+    if (weightLbs) weightLbs.style.display = 'none';
+
     currentLang = 'en';
     document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelector('.lang-btn[onclick="toggleLanguage(\'en\')"]').classList.add('active');
+    const enBtn = document.querySelector('.lang-btn[onclick="toggleLanguage(\'en\')]');
+    if (enBtn) enBtn.classList.add('active');
+
     updateLanguage();
     animateParticles('initial');
 }
@@ -447,37 +505,71 @@ window.onload = () => {
         const statusClass = params.get('status');
         currentLang = params.get('lang') || 'en';
 
-        document.getElementById('input-panel').style.display = 'none';
-        document.getElementById('result-panel').style.display = 'flex';
-        document.getElementById('card').classList.add('result-shown');
+        const inputPanel = document.getElementById('input-panel');
+        const resultPanel = document.getElementById('result-panel');
+        const card = document.getElementById('card');
+
+        if (inputPanel) inputPanel.style.display = 'none';
+        if (resultPanel) resultPanel.style.display = 'flex';
+        if (card) card.classList.add('result-shown');
+
         document.body.classList.add(statusClass);
         animateParticles(statusClass);
 
-        document.getElementById('result-name').textContent = name;
-        document.getElementById('result-age').textContent = age;
-        document.getElementById('result-bmi').textContent = bmi;
-        document.querySelector('.result-card').className = `result-card ${statusClass}`;
-        document.getElementById('status-bubble').className = `status-bubble ${statusClass}`;
+        const resultElements = {
+            'result-name': name,
+            'result-age': age,
+            'result-bmi': bmi,
+            'preview-name': name,
+            'preview-age': age,
+            'preview-bmi': bmi,
+            'preview-status': langData[currentLang][statusClass].status
+        };
+        let missingElements = [];
+        Object.entries(resultElements).forEach(([id, value]) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = value;
+            else missingElements.push(id);
+        });
 
-        document.getElementById('preview-name').textContent = name;
-        document.getElementById('preview-age').textContent = age;
-        document.getElementById('preview-bmi').textContent = bmi;
-        document.getElementById('preview-status').textContent = langData[currentLang][statusClass].status;
+        if (missingElements.length > 0) {
+            console.error(`Missing DOM elements for shared link: ${missingElements.join(', ')}`);
+            alert(currentLang === 'en' ? 'Error loading shared results: Missing elements' : 'শেয়ার করা ফলাফল লোড করতে ত্রুটি: উপাদান অনুপস্থিত');
+            reset();
+            return;
+        }
+
+        const resultCard = document.querySelector('.result-card');
+        if (resultCard) resultCard.className = `result-card ${statusClass}`;
+
+        const statusBubble = document.getElementById('status-bubble');
+        if (statusBubble) statusBubble.className = `status-bubble ${statusClass}`;
 
         updateLanguage(statusClass);
 
         const shareLink = window.location.href;
-        document.getElementById('share-link').value = shareLink;
+        const shareLinkInput = document.getElementById('share-link');
+        if (shareLinkInput) shareLinkInput.value = shareLink;
+
         const shareText = currentLang === 'en' ?
             `My LifePulse Scan: ${name}, Age ${age}, BMI ${bmi} (${langData[currentLang][statusClass].status}). Check yours!` :
             `আমার লাইফপালস স্ক্যান: ${name}, বয়স ${age}, বিএমআই ${bmi} (${langData[currentLang][statusClass].status})। আপনারটা পরীক্ষা করুন!`;
-        document.getElementById('share-twitter').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareLink)}`;
-        document.getElementById('share-facebook').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareLink)}`;
-        document.getElementById('share-whatsapp').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareLink)}`;
-        document.getElementById('share-linkedin').href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareLink)}`;
+        const shareLinks = {
+            'share-twitter': `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareLink)}`,
+            'share-facebook': `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareLink)}`,
+            'share-whatsapp': `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareLink)}`,
+            'share-linkedin': `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareLink)}`
+        };
+        Object.entries(shareLinks).forEach(([id, href]) => {
+            const el = document.getElementById(id);
+            if (el) el.href = href;
+        });
 
-        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelector(`.lang-btn[onclick="toggleLanguage('${currentLang}')"]`).classList.add('active');
+        const langBtn = document.querySelector(`.lang-btn[onclick="toggleLanguage('${currentLang}')"]`);
+        if (langBtn) {
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            langBtn.classList.add('active');
+        }
     } else {
         updateLanguage();
     }
