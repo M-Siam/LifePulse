@@ -80,6 +80,10 @@ body.obese::before {
     width: 100%;
     max-width: 600px;
     z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
 .card {
@@ -91,7 +95,9 @@ body.obese::before {
     border: 1px solid rgba(255, 255, 255, 0.2);
     transition: all 0.5s ease;
     position: relative;
-    overflow: hidden;
+    overflow-y: auto;
+    max-height: 80vh;
+    overscroll-behavior: contain;
 }
 
 .card.result-shown {
@@ -458,14 +464,14 @@ body.dark .result-title {
 
 .result-card {
     background: rgba(255, 255, 255, 0.2);
-    padding: 20px;
+    padding: 15px;
     border-radius: 15px;
     border: 1px solid #007bff;
     box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
     transition: border-color 0.5s;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
 
 body.dark .result-card {
@@ -479,7 +485,7 @@ body.dark .result-card {
 .result-card.obese { border-color: #ff5722; }
 
 .result-item {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: #333;
     margin: 5px 0;
 }
@@ -522,7 +528,7 @@ body.dark .result-item {
 
 .health-tip {
     background: rgba(255, 255, 255, 0.2);
-    padding: 15px;
+    padding: 12px;
     border-radius: 10px;
     color: #333;
     animation: slideIn 0.5s ease-in-out;
@@ -534,7 +540,7 @@ body.dark .health-tip {
 }
 
 .health-tip h3 {
-    margin-top: 10px;
+    margin: 8px 0 5px;
     color: #007bff;
 }
 
@@ -543,13 +549,13 @@ body.dark .health-tip h3 {
 }
 
 .share-section {
-    margin-top: 15px;
+    margin-top: 12px;
     text-align: center;
 }
 
 .share-section h3 {
     color: #007bff;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 body.dark .share-section h3 {
@@ -557,12 +563,12 @@ body.dark .share-section h3 {
 }
 
 .share-preview {
-    margin: 10px 0;
+    margin: 8px 0;
 }
 
 .preview-card {
     background: rgba(255, 255, 255, 0.2);
-    padding: 15px;
+    padding: 12px;
     border-radius: 10px;
     border: 1px solid #007bff;
     box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
@@ -627,13 +633,13 @@ body.dark .share-icons a:hover {
 }
 
 .credit {
-    position: absolute;
-    bottom: 10px;
-    right: 20px;
+    text-align: center;
+    margin-top: 15px;
     color: #007bff;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     text-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
     transition: transform 0.3s;
+    text-transform: uppercase;
 }
 
 body.dark .credit {
